@@ -2,22 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Mobile POS Billing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick POS Billing</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@500;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #1e3a8a;
+      --primary-hover: #172554;
       --accent: #16a34a;
+      --accent-hover: #15803d;
       --danger: #dc2626;
-      --bg: #f8fafc;
+      --bg: #f1f5f9;
       --card: #ffffff;
       --text: #0f172a;
       --muted: #64748b;
-      --border: #e2e8f0;
-      --radius: 12px;
+      --border: #cbd5e1;
+      --radius: 10px;
     }
 
     * {
@@ -25,7 +27,6 @@
       margin: 0;
       padding: 0;
       font-family: 'Noto Sans Kannada', 'Plus Jakarta Sans', sans-serif;
-      -webkit-tap-highlight-color: transparent;
     }
 
     body {
@@ -37,102 +38,134 @@
       overflow: hidden;
     }
 
-    /* Compact Mobile Header */
+    /* Top Bar */
     header {
       background: #ffffff;
       border-bottom: 1px solid var(--border);
-      padding: 10px 14px;
+      padding: 10px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 20;
     }
 
     .brand-section {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
     .brand-icon {
       background: var(--primary);
       color: #fff;
       font-weight: 800;
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.1rem;
+      font-size: 1.25rem;
     }
 
     .brand-name {
-      font-size: 1rem;
+      font-size: 1.15rem;
       font-weight: 800;
     }
 
-    .lang-select {
-      border: 1px solid var(--border);
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .lang-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       background: #f8fafc;
-      padding: 5px 8px;
-      border-radius: 6px;
-      font-size: 0.8rem;
+      padding: 5px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .lang-select {
+      border: none;
+      background: transparent;
+      font-size: 0.88rem;
       font-weight: 700;
       color: var(--primary);
       outline: none;
+      cursor: pointer;
     }
 
-    /* Product Scroll Area */
-    .mobile-workspace {
-      flex: 1;
+    .clock-display {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    /* Main Container */
+    .pos-workspace {
+      display: grid;
+      grid-template-columns: 1fr 390px;
+      height: calc(100vh - 57px);
+      overflow: hidden;
+    }
+
+    /* Product Section */
+    .catalog-panel {
+      padding: 16px 20px;
       overflow-y: auto;
-      padding: 12px;
-      padding-bottom: 90px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
-    .controls-row {
+    .catalog-actions {
       display: flex;
-      gap: 8px;
-      margin-bottom: 12px;
+      gap: 10px;
     }
 
     .search-field {
       flex: 1;
-      padding: 10px 12px;
+      padding: 10px 14px;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 0.9rem;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
       background: #fff;
       outline: none;
     }
 
     .search-field:focus {
       border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.12);
     }
 
-    .btn-add-custom {
-      background: var(--primary);
+    .btn-custom-add {
+      background: #2563eb;
       color: #ffffff;
       border: none;
-      padding: 0 12px;
-      border-radius: 8px;
-      font-size: 0.82rem;
+      padding: 0 16px;
+      border-radius: var(--radius);
+      font-size: 0.85rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
       white-space: nowrap;
+      transition: background 0.2s;
     }
 
-    /* Responsive 2-Column Mobile Grid */
+    .btn-custom-add:hover {
+      background: #1d4ed8;
+    }
+
+    /* Product Grid */
     .catalog-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 14px;
     }
 
     .item-card {
@@ -143,23 +176,26 @@
       display: flex;
       flex-direction: column;
       cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
       position: relative;
     }
 
-    .item-card:active {
-      transform: scale(0.98);
+    .item-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.07);
+      border-color: var(--primary);
     }
 
     .item-photo-wrap {
       width: 100%;
-      height: 105px;
+      height: 135px;
       background: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
       border-bottom: 1px solid #f1f5f9;
-      padding: 4px;
+      padding: 6px;
     }
 
     .item-photo {
@@ -175,200 +211,157 @@
       align-items: center;
       justify-content: center;
       color: #fff;
-      font-size: 1.8rem;
+      font-size: 2.2rem;
       font-weight: 800;
       border-radius: 6px;
     }
 
     .category-label {
       position: absolute;
-      top: 4px;
-      left: 4px;
+      top: 6px;
+      left: 6px;
       background: rgba(15, 23, 42, 0.8);
       color: #fff;
-      font-size: 0.6rem;
-      padding: 2px 5px;
+      font-size: 0.65rem;
+      padding: 2px 6px;
       border-radius: 4px;
       font-weight: 600;
     }
 
     .item-info {
-      padding: 8px;
+      padding: 10px;
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 4px;
+      flex: 1;
+      justify-content: space-between;
     }
 
     .item-title {
-      font-size: 0.85rem;
+      font-size: 0.95rem;
       font-weight: 700;
       color: var(--text);
       line-height: 1.2;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
 
     .item-rate {
-      font-size: 0.95rem;
+      font-size: 1.15rem;
       font-weight: 800;
       color: var(--primary);
+      margin-top: 2px;
     }
 
     .btn-push-cart {
       background: #eff6ff;
       color: var(--primary);
       border: 1px solid #bfdbfe;
-      padding: 6px 0;
+      padding: 6px;
       border-radius: 6px;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       font-weight: 700;
+      cursor: pointer;
       width: 100%;
       margin-top: 4px;
     }
 
-    /* Bottom Fixed Cart Bar */
-    .mobile-cart-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #ffffff;
-      border-top: 1px solid var(--border);
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 -4px 12px rgba(0,0,0,0.06);
-      z-index: 30;
-    }
-
-    .cart-summary-text {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .cart-total-tag {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .cart-items-tag {
-      font-size: 0.72rem;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    .btn-view-bill {
-      background: var(--accent);
+    .item-card:hover .btn-push-cart {
+      background: var(--primary);
       color: #ffffff;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-size: 0.88rem;
-      font-weight: 700;
-      cursor: pointer;
+      border-color: var(--primary);
     }
 
-    /* Cart Drawer Modal */
-    .drawer-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.4);
-      display: none;
-      align-items: flex-end;
-      z-index: 50;
-    }
-
-    .cart-drawer {
-      background: #ffffff;
-      width: 100%;
-      max-height: 80vh;
-      border-radius: 16px 16px 0 0;
+    /* Cart Sidebar */
+    .cart-panel {
+      background: var(--card);
+      border-left: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      overflow: hidden;
-      animation: slideUp 0.2s ease-out;
+      height: 100%;
     }
 
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-
-    .drawer-header {
-      padding: 14px;
+    .cart-header {
+      padding: 14px 18px;
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .drawer-header h3 {
+    .cart-header h2 {
       font-size: 1rem;
-      font-weight: 800;
+      font-weight: 700;
     }
 
-    .btn-drawer-clear {
+    .btn-empty {
       background: none;
       border: none;
       color: var(--danger);
       font-size: 0.8rem;
       font-weight: 700;
+      cursor: pointer;
     }
 
-    .drawer-items {
+    .cart-items-wrap {
+      flex: 1;
       overflow-y: auto;
-      padding: 12px 14px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      flex: 1;
     }
 
-    .drawer-row {
+    .cart-blank {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-align: center;
+      gap: 6px;
+    }
+
+    .cart-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       background: #f8fafc;
       padding: 8px 10px;
       border-radius: 8px;
       border: 1px solid var(--border);
     }
 
-    .drawer-row-desc {
+    .cart-line-meta {
       display: flex;
       flex-direction: column;
-      max-width: 130px;
+      max-width: 140px;
     }
 
-    .drawer-row-name {
+    .cart-line-name {
       font-size: 0.85rem;
       font-weight: 700;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      line-height: 1.2;
     }
 
-    .drawer-row-rate {
-      font-size: 0.72rem;
+    .cart-line-unit {
+      font-size: 0.75rem;
       color: var(--muted);
     }
 
-    .qty-bar {
+    .qty-stepper {
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
     .btn-step {
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       background: #ffffff;
       border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 1rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
       font-weight: 700;
       cursor: pointer;
     }
@@ -376,107 +369,52 @@
     .step-val {
       font-size: 0.9rem;
       font-weight: 700;
-      min-width: 20px;
+      min-width: 18px;
       text-align: center;
     }
 
-    .drawer-row-total {
-      font-size: 0.9rem;
+    .cart-line-total {
+      font-size: 0.95rem;
       font-weight: 800;
-      min-width: 45px;
+      min-width: 50px;
       text-align: right;
     }
 
-    .drawer-footer {
-      padding: 14px;
-      background: #f8fafc;
+    /* Footer & Calculations */
+    .cart-bottom {
+      padding: 14px 18px;
       border-top: 1px solid var(--border);
+      background: #f8fafc;
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
 
-    .cash-calc-row {
+    .calc-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .calc-grand {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text);
+      padding-top: 6px;
+      border-top: 1px dashed var(--border);
+    }
+
+    .cash-box {
       display: flex;
       gap: 8px;
       align-items: center;
     }
 
-    .cash-input {
+    .cash-field {
       flex: 1;
-      padding: 10px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 0.9rem;
-      outline: none;
-    }
-
-    .change-text {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--accent);
-    }
-
-    .drawer-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .btn-close-drawer {
-      background: #e2e8f0;
-      border: none;
-      padding: 12px 16px;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .btn-finalize-bill {
-      flex: 1;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    /* Modal Form / Receipt System */
-    .modal-shade {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.5);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      padding: 14px;
-    }
-
-    .modal-card {
-      background: #ffffff;
-      width: 100%;
-      max-width: 340px;
-      border-radius: 12px;
-      padding: 18px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-
-    .form-group {
-      margin-bottom: 10px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.78rem;
-      font-weight: 700;
-      margin-bottom: 3px;
-    }
-
-    .form-ctrl {
-      width: 100%;
       padding: 8px 10px;
       border: 1px solid var(--border);
       border-radius: 6px;
@@ -484,43 +422,107 @@
       outline: none;
     }
 
+    .balance-tag {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .btn-pay-now {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-pay-now:hover {
+      background: var(--accent-hover);
+    }
+
+    /* Quick Add Modal */
+    .modal-shade {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      width: 350px;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .form-ctrl {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.88rem;
+      outline: none;
+    }
+
+    .form-ctrl:focus {
+      border-color: var(--primary);
+    }
+
     .receipt-header {
       text-align: center;
       border-bottom: 1px dashed #cbd5e1;
-      padding-bottom: 6px;
-      margin-bottom: 8px;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .receipt-tbl {
       width: 100%;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       border-collapse: collapse;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .receipt-tbl th {
       border-bottom: 1px solid var(--border);
-      padding: 3px 0;
+      padding: 4px 0;
       text-align: left;
     }
 
     .receipt-tbl td {
-      padding: 4px 0;
+      padding: 5px 0;
     }
 
     .receipt-foot {
       border-top: 1px dashed #cbd5e1;
-      padding-top: 6px;
+      padding-top: 8px;
       font-size: 0.85rem;
     }
 
-    .modal-btns {
+    .modal-buttons {
       display: flex;
       gap: 8px;
-      margin-top: 12px;
+      margin-top: 14px;
     }
 
-    .btn-modal-primary {
+    .btn-action-primary {
       flex: 1;
       background: var(--primary);
       color: #fff;
@@ -531,11 +533,12 @@
       cursor: pointer;
     }
 
-    .btn-modal-cancel {
+    .btn-action-cancel {
       background: #f1f5f9;
       border: 1px solid var(--border);
       padding: 10px 14px;
       border-radius: 6px;
+      cursor: pointer;
       font-weight: 600;
     }
 
@@ -543,10 +546,10 @@
       body * {
         visibility: hidden;
       }
-      .modal-card.receipt-print, .modal-card.receipt-print * {
+      .modal-box.receipt-doc, .modal-box.receipt-doc * {
         visibility: visible;
       }
-      .modal-card.receipt-print {
+      .modal-box.receipt-doc {
         position: absolute;
         left: 0;
         top: 0;
@@ -554,7 +557,7 @@
         box-shadow: none;
         padding: 0;
       }
-      .modal-btns {
+      .modal-buttons {
         display: none !important;
       }
     }
@@ -565,91 +568,109 @@
   <header>
     <div class="brand-section">
       <div class="brand-icon">₹</div>
-      <div class="brand-name" id="uiBrandName">Billing POS</div>
+      <div class="brand-name" id="uiBrandName">Shop Billing Counter</div>
     </div>
-    <select class="lang-select" id="langSelect" onchange="switchLanguage(this.value)">
-      <option value="en">English</option>
-      <option value="kn">ಕನ್ನಡ</option>
-    </select>
+
+    <div class="header-controls">
+      <div class="lang-box">
+        <span style="font-size: 0.85rem; font-weight: 700; color: var(--muted);">🌐 ಭಾಷೆ:</span>
+        <select class="lang-select" id="langSelect" onchange="switchLanguage(this.value)">
+          <option value="en">English</option>
+          <option value="kn">ಕನ್ನಡ (Kannada)</option>
+        </select>
+      </div>
+      <div class="clock-display" id="clock">--:--:--</div>
+    </div>
   </header>
 
-  <main class="mobile-workspace">
-    <div class="controls-row">
-      <input type="text" id="searchInput" class="search-field" placeholder="🔍 Search item..." oninput="handleFilter()" />
-      <button class="btn-add-custom" onclick="openNewModal()" id="uiAddCustomBtn">
-        <span>➕</span> Add
-      </button>
-    </div>
-    <div class="catalog-grid" id="catalogGrid"></div>
-  </main>
+  <div class="pos-workspace">
+    <main class="catalog-panel">
+      <div class="catalog-actions">
+        <input type="text" id="searchInput" class="search-field" placeholder="🔍 Search product..." oninput="handleFilter()" />
+        <button class="btn-custom-add" onclick="openNewModal()" id="uiAddCustomBtn">
+          <span>➕</span> Add Custom Item
+        </button>
+      </div>
+      <div class="catalog-grid" id="catalogGrid"></div>
+    </main>
 
-  <div class="mobile-cart-bar">
-    <div class="cart-summary-text">
-      <span class="cart-total-tag" id="barTotal">₹0</span>
-      <span class="cart-items-tag"><span id="barItemCount">0</span> <span id="uiBarItemsLabel">items</span></span>
-    </div>
-    <button class="btn-view-bill" onclick="openDrawer()" id="uiViewBillBtn">View Bill 🛒</button>
-  </div>
-
-  <div class="drawer-overlay" id="cartDrawerOverlay">
-    <div class="cart-drawer">
-      <div class="drawer-header">
-        <h3 id="uiDrawerTitle">Current Order</h3>
-        <button class="btn-drawer-clear" onclick="clearCart()" id="uiDrawerClear">Clear All</button>
+    <aside class="cart-panel">
+      <div class="cart-header">
+        <h2><span id="uiCartLabel">Current Order</span> (<span id="totalItemsCount">0</span>)</h2>
+        <button class="btn-empty" onclick="clearCart()" id="uiClearBtn">Clear All</button>
       </div>
 
-      <div class="drawer-items" id="drawerItemsList"></div>
-
-      <div class="drawer-footer">
-        <div class="cash-calc-row">
-          <input type="number" id="cashInput" class="cash-input" placeholder="Cash Given (₹)" oninput="updateChangeCalc()" />
-          <span class="change-text" id="drawerChangeText">Change: ₹0</span>
-        </div>
-        <div class="drawer-actions">
-          <button class="btn-close-drawer" onclick="closeDrawer()" id="uiCloseDrawer">Close</button>
-          <button class="btn-finalize-bill" onclick="triggerReceipt()" id="uiPrintBillAction">Print Bill (₹<span id="drawerTotalText">0</span>)</button>
+      <div class="cart-items-wrap" id="cartItemsList">
+        <div class="cart-blank">
+          <span style="font-size: 2rem;">🛒</span>
+          <p id="uiEmptyNotice">No items added yet.<br>Click any item to add to bill.</p>
         </div>
       </div>
-    </div>
+
+      <div class="cart-bottom">
+        <div class="calc-row">
+          <span id="uiSubTotalLabel">Subtotal</span>
+          <span id="subTotalAmt">₹0</span>
+        </div>
+        <div class="calc-grand">
+          <span id="uiGrandTotalLabel">Grand Total</span>
+          <span id="grandTotalAmt">₹0</span>
+        </div>
+
+        <div class="cash-box">
+          <input type="number" id="cashGivenInput" class="cash-field" placeholder="Cash Given (₹)" oninput="updateChangeCalculation()" />
+          <span class="balance-tag" id="changeAmtText">Change: ₹0</span>
+        </div>
+
+        <button class="btn-pay-now" onclick="triggerReceipt()" id="uiInvoiceBtn">Complete & Print Bill</button>
+      </div>
+    </aside>
   </div>
 
   <div class="modal-shade" id="customModal">
-    <div class="modal-card">
-      <h3 style="font-size: 1rem; margin-bottom: 10px;" id="uiCustomTitle">Add Custom Item</h3>
+    <div class="modal-box">
+      <h3 style="font-size: 1.05rem; margin-bottom: 12px;" id="uiCustomTitle">Add Custom Item / ಹೊಸ ಐಟಂ</h3>
+
       <div class="form-group">
         <label id="uiLblNameEn">Item Name (English) *</label>
-        <input type="text" id="itemNameEn" class="form-ctrl" placeholder="e.g. Vimal" required />
+        <input type="text" id="itemNameEn" class="form-ctrl" placeholder="e.g. Vimal / Shikhar" required />
       </div>
+
       <div class="form-group">
         <label id="uiLblNameKn">Item Name (ಕನ್ನಡ)</label>
-        <input type="text" id="itemNameKn" class="form-ctrl" placeholder="ಉದಾ: ವಿಮಲ್" />
+        <input type="text" id="itemNameKn" class="form-ctrl" placeholder="ಉದಾ: ವಿಮಲ್ / ಶಿಖರ್" />
       </div>
+
       <div class="form-group">
-        <label id="uiLblPrice">Price (₹) *</label>
+        <label id="uiLblPrice">Price / ಬೆಲೆ (₹) *</label>
         <input type="number" id="itemPrice" class="form-ctrl" placeholder="e.g. 50" required />
       </div>
+
       <div class="form-group">
-        <label id="uiLblCategory">Category</label>
-        <input type="text" id="itemCategory" class="form-ctrl" placeholder="Paan Masala, Cigarette" />
+        <label id="uiLblCategory">Category / ವಿಭಾಗ</label>
+        <input type="text" id="itemCategory" class="form-ctrl" placeholder="e.g. Paan Masala, Cigarette, Tobacco" />
       </div>
+
       <div class="form-group">
-        <label id="uiLblPhoto">Select Image</label>
-        <input type="file" id="itemPhotoFile" accept="image/*" class="form-ctrl" style="padding: 4px;" />
+        <label id="uiLblPhoto">Select Image / ಫೋಟೋ ಆಯ್ಕೆಮಾಡಿ</label>
+        <input type="file" id="itemPhotoFile" accept="image/*" class="form-ctrl" style="padding: 5px;" />
       </div>
-      <div class="modal-btns">
-        <button class="btn-modal-cancel" onclick="closeNewModal()" id="uiBtnCancel">Cancel</button>
-        <button class="btn-modal-primary" onclick="submitCustomItem()" id="uiBtnSave">Save</button>
+
+      <div class="modal-buttons">
+        <button class="btn-action-cancel" onclick="closeNewModal()" id="uiBtnCancel">Cancel</button>
+        <button class="btn-action-primary" onclick="submitCustomItem()" id="uiBtnSave">Save & Add</button>
       </div>
     </div>
   </div>
 
   <div class="modal-shade" id="receiptModal">
-    <div class="modal-card receipt-print">
+    <div class="modal-box receipt-doc">
       <div class="receipt-header">
-        <h3 style="font-size: 1rem; font-weight: 800;" id="uiShopHeader">RETAIL STORE</h3>
-        <p style="font-size: 0.72rem; color: var(--muted);" id="uiMemoHeader">Tax Invoice / Cash Memo</p>
-        <p style="font-size: 0.7rem; color: var(--muted);" id="invoiceClock"></p>
+        <h3 style="font-size: 1.1rem; font-weight: 800;" id="uiShopHeader">RETAIL STORE</h3>
+        <p style="font-size: 0.75rem; color: var(--muted);" id="uiMemoHeader">Tax Invoice / Cash Memo</p>
+        <p style="font-size: 0.75rem; color: var(--muted);" id="invoiceClock"></p>
       </div>
+
       <table class="receipt-tbl">
         <thead>
           <tr>
@@ -660,24 +681,26 @@
         </thead>
         <tbody id="invoiceRows"></tbody>
       </table>
+
       <div class="receipt-foot">
         <div style="display: flex; justify-content: space-between; font-weight: 800;">
           <span id="uiReceiptTotalLabel">Total Payable:</span>
           <span id="invoiceFinalTotal">₹0</span>
         </div>
-        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--muted); margin-top: 2px;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--muted); margin-top: 4px;">
           <span id="uiReceiptPaidLabel">Cash Paid:</span>
           <span id="invoiceCashPaid">₹0</span>
         </div>
-        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--muted);">
+        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--muted);">
           <span id="uiReceiptDueLabel">Change Returned:</span>
           <span id="invoiceChangeReturned">₹0</span>
         </div>
-        <p style="text-align: center; font-size: 0.75rem; margin-top: 10px; color: #16a34a; font-weight: 700;" id="uiThanksNote">Thank you! Visit again.</p>
+        <p style="text-align: center; font-size: 0.8rem; margin-top: 14px; color: #16a34a; font-weight: 700;" id="uiThanksNote">Thank you! Visit again.</p>
       </div>
-      <div class="modal-btns">
-        <button class="btn-modal-cancel" onclick="closeReceiptModal()" id="uiCloseBtn">Close</button>
-        <button class="btn-modal-primary" onclick="window.print()" id="uiPrintBtn">🖨️ Print</button>
+
+      <div class="modal-buttons">
+        <button class="btn-action-cancel" onclick="closeReceiptModal()" id="uiCloseBtn">Close</button>
+        <button class="btn-action-primary" onclick="window.print()" id="uiPrintBtn">🖨️ Print Bill</button>
       </div>
     </div>
   </div>
@@ -685,28 +708,20 @@
   <script>
     const dictionary = {
       en: {
-        brand: "Billing POS",
-        search: "🔍 Search item...",
-        add: "➕ Add",
-        barItems: "items",
-        viewBill: "View Bill 🛒",
-        drawerTitle: "Current Order",
-        clear: "Clear",
-        empty: "No items added yet.<br>Tap items to add.",
+        brand: "Shop Billing Counter",
+        search: "🔍 Search product (Vimal, King, Gold...)",
+        addCustom: "➕ Add Custom Item",
+        cartTitle: "Current Order",
+        clear: "Clear All",
+        empty: "No items added yet.<br>Click any item to add to bill.",
+        subtotal: "Subtotal",
+        grandTotal: "Grand Total",
         cashPlaceholder: "Cash Given (₹)",
         changeText: "Change: ₹0",
         changePrefix: "Change: ₹",
         duePrefix: "Due: ₹",
-        printBill: "Print Bill",
+        payBtn: "Complete & Print Bill",
         addBtn: "+ Add",
-        customTitle: "Add Custom Item",
-        lblNameEn: "Item Name (English) *",
-        lblNameKn: "Item Name (ಕನ್ನಡ)",
-        lblPrice: "Price (₹) *",
-        lblCat: "Category",
-        lblPhoto: "Select Image",
-        btnCancel: "Cancel",
-        btnSave: "Save",
         shopName: "RETAIL STORE",
         invoiceMemo: "Tax Invoice / Cash Memo",
         thItem: "Item",
@@ -717,31 +732,33 @@
         recDue: "Change Returned:",
         thanks: "Thank you! Visit again.",
         close: "Close",
-        print: "🖨️ Print"
+        print: "🖨️ Print Bill",
+        each: "each",
+        noMatch: "No products match your search.",
+        customTitle: "Add Custom Item",
+        lblNameEn: "Item Name (English) *",
+        lblNameKn: "Item Name (ಕನ್ನಡ)",
+        lblPrice: "Price (₹) *",
+        lblCat: "Category",
+        lblPhoto: "Select Image",
+        btnCancel: "Cancel",
+        btnSave: "Save & Add"
       },
       kn: {
-        brand: "ಬಿಲ್ಲಿಂಗ್ POS",
-        search: "🔍 ಐಟಂ ಹುಡುಕಿ...",
-        add: "➕ ಸೇರಿಸಿ",
-        barItems: "ಐಟಂಗಳು",
-        viewBill: "ಬಿಲ್ ನೋಡಿ 🛒",
-        drawerTitle: "ಪ್ರಸ್ತುತ ಆರ್ಡರ್",
-        clear: "ಅಳಿಸು",
-        empty: "ಯಾವುದೇ ಐಟಂ ಸೇರಿಸಲಾಗಿಲ್ಲ.<br>ಐಟಂ ಮೇಲೆ ಕ್ಲಿಕ್ ಮಾಡಿ.",
+        brand: "ಅಂಗಡಿ ಬಿಲ್ಲಿಂಗ್ ಕೌಂಟರ್",
+        search: "🔍 ಐಟಂ ಹುಡುಕಿ (ವಿಮಲ್, ಕಿಂಗ್, ಗೋಲ್ಡ್...)",
+        addCustom: "➕ ಹೊಸ ಐಟಂ ಸೇರಿಸಿ",
+        cartTitle: "ಪ್ರಸ್ತುತ ಆರ್ಡರ್",
+        clear: "ಎಲ್ಲಾ ಅಳಿಸು",
+        empty: "ಯಾವುದೇ ಐಟಂ ಸೇರಿಸಲಾಗಿಲ್ಲ.<br>ಬಿಲ್ ಮಾಡಲು ಐಟಂ ಕ್ಲಿಕ್ ಮಾಡಿ.",
+        subtotal: "ಉಪಮೊತ್ತ",
+        grandTotal: "ಒಟ್ಟು ಮೊತ್ತ",
         cashPlaceholder: "ಗ್ರಾಹಕರು ನೀಡಿದ ಹಣ (₹)",
         changeText: "ಬಾಕಿ: ₹0",
         changePrefix: "ಬಾಕಿ: ₹",
         duePrefix: "ಉಳಿಕೆ: ₹",
-        printBill: "ಬಿಲ್ ಮುದ್ರಿಸಿ",
+        payBtn: "ಖರೀದಿ ರಶೀದಿ ಮುದ್ರಿಸಿ",
         addBtn: "+ ಸೇರಿಸಿ",
-        customTitle: "ಹೊಸ ಐಟಂ ಸೇರಿಸಿ",
-        lblNameEn: "ಐಟಂ ಹೆಸರು (ಇಂಗ್ಲಿಷ್) *",
-        lblNameKn: "ಐಟಂ ಹೆಸರು (ಕನ್ನಡ)",
-        lblPrice: "ಬೆಲೆ (₹) *",
-        lblCat: "ವಿಭಾಗ",
-        lblPhoto: "ಫೋಟೋ ಆಯ್ಕೆಮಾಡಿ",
-        btnCancel: "ರದ್ದು",
-        btnSave: "ಉಳಿಸಿ",
         shopName: "ಶ್ರೀ ಚಿಲ್ಲರೆ ವ್ಯಾಪಾರ ಮಳಿಗೆ",
         invoiceMemo: "ಖರೀದಿ ರಶೀದಿ / ಕ್ಯಾಶ್ ಮೆಮೊ",
         thItem: "ಐಟಂ",
@@ -752,27 +769,38 @@
         recDue: "ಮರಳಿಸಿದ ಬಾಕಿ:",
         thanks: "ಧನ್ಯವಾದಗಳು! ಮತ್ತೆ ಬನ್ನಿ.",
         close: "ಮುಚ್ಚು",
-        print: "🖨️ ಪ್ರಿಂಟ್"
+        print: "🖨️ ಬಿಲ್ ಪ್ರಿಂಟ್ ಮಾಡಿ",
+        each: "ಪ್ರತಿಗೆ",
+        noMatch: "ಯಾವುದೇ ಉತ್ಪನ್ನ ಕಂಡುಬಂದಿಲ್ಲ.",
+        customTitle: "ಹೊಸ ಐಟಂ ಸೇರಿಸಿ",
+        lblNameEn: "ಐಟಂ ಹೆಸರು (ಇಂಗ್ಲಿಷ್) *",
+        lblNameKn: "ಐಟಂ ಹೆಸರು (ಕನ್ನಡ)",
+        lblPrice: "ಬೆಲೆ (₹) *",
+        lblCat: "ವಿಭಾಗ",
+        lblPhoto: "ಫೋಟೋ ಆಯ್ಕೆಮಾಡಿ",
+        btnCancel: "ರದ್ದುಮಾಡಿ",
+        btnSave: "ಉಳಿಸಿ ಸೇರಿಸಿ"
       }
     };
 
+    // Excel Book1.xlsx items with photos + local fallbacks
     const initialItems = [
-      { id: 1, nameEn: "Vimal", nameKn: "ವಿಮಲ್", cost: 123, catEn: "Paan Masala", catKn: "ಪಾನ್ ಮಸಾಲಾ", img: "images/vimal.jpg", color: "#d97706" },
-      { id: 2, nameEn: "Hira", nameKn: "ಹೀರಾ", cost: 175, catEn: "Paan Masala", catKn: "ಪಾನ್ ಮಸಾಲಾ", img: "images/hira.jpg", color: "#dc2626" },
+      { id: 1, nameEn: "Vimal", nameKn: "ವಿಮಲ್ ಪಾನ್ ಮಸಾಲಾ", cost: 123, catEn: "Paan Masala", catKn: "ಪಾನ್ ಮಸಾಲಾ", img: "images/vimal.jpg", color: "#d97706" },
+      { id: 2, nameEn: "Hira", nameKn: "ಹೀರಾ ಪಾನ್ ಮಸಾಲಾ", cost: 175, catEn: "Paan Masala", catKn: "ಪಾನ್ ಮಸಾಲಾ", img: "images/hira.jpg", color: "#dc2626" },
       { id: 3, nameEn: "Kashisah", nameKn: "ಕಶಿಶ್", cost: 50, catEn: "Pouch", catKn: "ಪೌಚ್", img: "images/kashish.jpg", color: "#7c3aed" },
       { id: 4, nameEn: "Kashish (2)", nameKn: "ಕಶಿಶ್ (೨)", cost: 50, catEn: "Pouch", catKn: "ಪೌಚ್", img: "images/kashish2.jpg", color: "#4f46e5" },
-      { id: 5, nameEn: "Hello", nameKn: "ಹೆಲೋ", cost: 35, catEn: "Tobacco", catKn: "ತಂಬಾಕು", img: "images/hello.jpg", color: "#db2777" },
-      { id: 6, nameEn: "Gold", nameKn: "ಗೋಲ್ಡ್", cost: 120, catEn: "Cigarette", catKn: "ಸಿಗರೇಟ್", img: "images/gold.jpg", color: "#ca8a04" },
+      { id: 5, nameEn: "Hello", nameKn: "ಹೆಲೋ ತಂಬಾಕು", cost: 35, catEn: "Tobacco", catKn: "ತಂಬಾಕು", img: "images/hello.jpg", color: "#db2777" },
+      { id: 6, nameEn: "Gold", nameKn: "ಗೋಲ್ಡ್ ಫ್ಲೇಕ್", cost: 120, catEn: "Cigarette", catKn: "ಸಿಗರೇಟ್", img: "images/gold.jpg", color: "#ca8a04" },
       { id: 7, nameEn: "King", nameKn: "ಕಿಂಗ್ಸ್", cost: 223, catEn: "Cigarette", catKn: "ಸಿಗರೇಟ್", img: "images/king.jpg", color: "#0284c7" },
       { id: 8, nameEn: "Light King", nameKn: "ಲೈಟ್ ಕಿಂಗ್", cost: 223, catEn: "Cigarette", catKn: "ಸಿಗರೇಟ್", img: "images/light-king.jpg", color: "#0d9488" }
     ];
 
-    let inventory = JSON.parse(localStorage.getItem("pos_stock_phone")) || initialItems;
+    let inventory = JSON.parse(localStorage.getItem("pos_stock_db")) || initialItems;
     let activeLang = "en";
     let cart = {};
 
     function persistStock() {
-      localStorage.setItem("pos_stock_phone", JSON.stringify(inventory));
+      localStorage.setItem("pos_stock_db", JSON.stringify(inventory));
     }
 
     function switchLanguage(lang) {
@@ -781,12 +809,13 @@
 
       document.getElementById("uiBrandName").innerText = t.brand;
       document.getElementById("searchInput").placeholder = t.search;
-      document.getElementById("uiAddCustomBtn").innerHTML = `<span>➕</span> ${t.add}`;
-      document.getElementById("uiBarItemsLabel").innerText = t.barItems;
-      document.getElementById("uiViewBillBtn").innerText = t.viewBill;
-      document.getElementById("uiDrawerTitle").innerText = t.drawerTitle;
-      document.getElementById("uiDrawerClear").innerText = t.clear;
-      document.getElementById("cashInput").placeholder = t.cashPlaceholder;
+      document.getElementById("uiAddCustomBtn").innerHTML = `<span>➕</span> ${t.addCustom}`;
+      document.getElementById("uiCartLabel").innerText = t.cartTitle;
+      document.getElementById("uiClearBtn").innerText = t.clear;
+      document.getElementById("uiSubTotalLabel").innerText = t.subtotal;
+      document.getElementById("uiGrandTotalLabel").innerText = t.grandTotal;
+      document.getElementById("cashGivenInput").placeholder = t.cashPlaceholder;
+      document.getElementById("uiInvoiceBtn").innerText = t.payBtn;
 
       document.getElementById("uiCustomTitle").innerText = t.customTitle;
       document.getElementById("uiLblNameEn").innerText = t.lblNameEn;
@@ -810,7 +839,7 @@
       document.getElementById("uiPrintBtn").innerText = t.print;
 
       renderItems(inventory);
-      renderCart();
+      renderCartRows();
     }
 
     function localizedTitle(item) {
@@ -826,7 +855,7 @@
       const t = dictionary[activeLang];
 
       if (list.length === 0) {
-        grid.innerHTML = `<p style="grid-column: 1/-1; color: var(--muted); text-align:center; padding: 20px;">No items found.</p>`;
+        grid.innerHTML = `<p style="grid-column: 1/-1; color: var(--muted); padding: 20px;">${t.noMatch}</p>`;
         return;
       }
 
@@ -852,8 +881,10 @@
             `}
           </div>
           <div class="item-info">
-            <div class="item-title">${localizedTitle(item)}</div>
-            <div class="item-rate">₹${item.cost}</div>
+            <div>
+              <div class="item-title">${localizedTitle(item)}</div>
+              <div class="item-rate">₹${item.cost}</div>
+            </div>
             <button class="btn-push-cart" type="button" onclick="event.stopPropagation(); pushToCart(${item.id})">
               ${t.addBtn}
             </button>
@@ -880,26 +911,25 @@
         const product = inventory.find(i => i.id === id);
         if (product) cart[id] = { ...product, qty: 1 };
       }
-      renderCart();
+      renderCartRows();
     }
 
     function shiftQuantity(id, delta) {
       if (!cart[id]) return;
       cart[id].qty += delta;
       if (cart[id].qty <= 0) delete cart[id];
-      renderCart();
+      renderCartRows();
     }
 
     function clearCart() {
       cart = {};
-      const cashBox = document.getElementById("cashInput");
+      const cashBox = document.getElementById("cashGivenInput");
       if (cashBox) cashBox.value = "";
-      renderCart();
-      closeDrawer();
+      renderCartRows();
     }
 
-    function renderCart() {
-      const container = document.getElementById("drawerItemsList");
+    function renderCartRows() {
+      const container = document.getElementById("cartItemsList");
       const t = dictionary[activeLang];
       const keys = Object.keys(cart);
       let count = 0;
@@ -907,8 +937,9 @@
 
       if (keys.length === 0) {
         container.innerHTML = `
-          <div style="text-align: center; color: var(--muted); padding: 30px 10px; font-size: 0.9rem;">
-            🛒<br>${t.empty}
+          <div class="cart-blank">
+            <span style="font-size: 2rem;">🛒</span>
+            <p>${t.empty}</p>
           </div>
         `;
       } else {
@@ -918,33 +949,33 @@
           count += item.qty;
           total += lineSum;
           return `
-            <div class="drawer-row">
-              <div class="drawer-row-desc">
-                <span class="drawer-row-name">${localizedTitle(item)}</span>
-                <span class="drawer-row-rate">₹${item.cost}</span>
+            <div class="cart-line">
+              <div class="cart-line-meta">
+                <span class="cart-line-name">${localizedTitle(item)}</span>
+                <span class="cart-line-unit">₹${item.cost} ${t.each}</span>
               </div>
-              <div class="qty-bar">
+              <div class="qty-stepper">
                 <button class="btn-step" type="button" onclick="shiftQuantity(${item.id}, -1)">-</button>
                 <span class="step-val">${item.qty}</span>
                 <button class="btn-step" type="button" onclick="shiftQuantity(${item.id}, 1)">+</button>
               </div>
-              <div class="drawer-row-total">₹${lineSum}</div>
+              <div class="cart-line-total">₹${lineSum}</div>
             </div>
           `;
         }).join("");
       }
 
-      document.getElementById("barTotal").innerText = `₹${total}`;
-      document.getElementById("barItemCount").innerText = count;
-      document.getElementById("drawerTotalText").innerText = total;
-      updateChangeCalc();
+      document.getElementById("totalItemsCount").innerText = count;
+      document.getElementById("subTotalAmt").innerText = `₹${total}`;
+      document.getElementById("grandTotalAmt").innerText = `₹${total}`;
+      updateChangeCalculation();
     }
 
-    function updateChangeCalc() {
+    function updateChangeCalculation() {
       const t = dictionary[activeLang];
-      const total = parseFloat(document.getElementById("drawerTotalText").innerText) || 0;
-      const cash = parseFloat(document.getElementById("cashInput").value) || 0;
-      const tag = document.getElementById("drawerChangeText");
+      const total = parseFloat(document.getElementById("grandTotalAmt").innerText.replace("₹", "")) || 0;
+      const cash = parseFloat(document.getElementById("cashGivenInput").value) || 0;
+      const tag = document.getElementById("changeAmtText");
 
       if (cash >= total && total > 0) {
         tag.innerText = `${t.changePrefix}${(cash - total).toFixed(2)}`;
@@ -958,16 +989,10 @@
       }
     }
 
-    function openDrawer() {
-      document.getElementById("cartDrawerOverlay").style.display = "flex";
-    }
-
-    function closeDrawer() {
-      document.getElementById("cartDrawerOverlay").style.display = "none";
-    }
-
+    /* Modal Form for Custom Items */
     function openNewModal() {
       document.getElementById("customModal").style.display = "flex";
+      document.getElementById("itemNameEn").focus();
     }
 
     function closeNewModal() {
@@ -987,7 +1012,7 @@
       const file = document.getElementById("itemPhotoFile");
 
       if (!nameEn || isNaN(price) || price <= 0) {
-        alert(activeLang === 'kn' ? "ಸರಿಯಾದ ಹೆಸರು ಮತ್ತು ಬೆಲೆ ನಮೂದಿಸಿ." : "Enter valid name and price.");
+        alert(activeLang === 'kn' ? "ದಯವಿಟ್ಟು ಸರಿಯಾದ ಹೆಸರು ಮತ್ತು ಬೆಲೆಯನ್ನು ನಮೂದಿಸಿ." : "Please enter a valid product name and price.");
         return;
       }
 
@@ -1005,6 +1030,7 @@
           img: imgPayload || "",
           color: randTint
         };
+
         inventory.unshift(itemObj);
         persistStock();
         renderItems(inventory);
@@ -1020,10 +1046,11 @@
       }
     }
 
+    /* Bill Receipt Modal */
     function triggerReceipt() {
       const keys = Object.keys(cart);
       if (keys.length === 0) {
-        alert(activeLang === 'kn' ? "ಬಿಲ್ ಮಾಡಲು ಐಟಂ ಸೇರಿಸಿ." : "Add items to generate bill.");
+        alert(activeLang === 'kn' ? "ದಯವಿಟ್ಟು ಬಿಲ್ ರಚಿಸಲು ಮೊದಲು ಐಟಂ ಸೇರಿಸಿ." : "Please add items to bill.");
         return;
       }
 
@@ -1041,14 +1068,13 @@
         `;
       }).join("");
 
-      const paid = parseFloat(document.getElementById("cashInput").value) || grandTotal;
+      const paid = parseFloat(document.getElementById("cashGivenInput").value) || grandTotal;
       const change = Math.max(0, paid - grandTotal);
 
       document.getElementById("invoiceClock").innerText = new Date().toLocaleString(activeLang === 'kn' ? 'kn-IN' : 'en-IN');
       document.getElementById("invoiceFinalTotal").innerText = `₹${grandTotal}`;
       document.getElementById("invoiceCashPaid").innerText = `₹${paid}`;
       document.getElementById("invoiceChangeReturned").innerText = `₹${change}`;
-      closeDrawer();
       document.getElementById("receiptModal").style.display = "flex";
     }
 
@@ -1057,8 +1083,14 @@
       clearCart();
     }
 
+    function updateTick() {
+      document.getElementById("clock").innerText = new Date().toLocaleTimeString();
+    }
+    setInterval(updateTick, 1000);
+    updateTick();
+
+    // Initial render
     renderItems(inventory);
-    renderCart();
   </script>
 </body>
 </html>
