@@ -3,40 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#1e3a8a" />
+  <meta name="theme-color" content="#ffffff" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>Shop POS Mobile</title>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>Premium POS App</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@500;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+Kannada:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
     :root {
-      --primary: #1e3a8a;
-      --primary-active: #172554;
-      --accent: #16a34a;
-      --accent-active: #15803d;
-      --danger: #ef4444;
-      --bg: #f8fafc;
-      --card: #ffffff;
-      --text: #0f172a;
-      --muted: #64748b;
+      --bg-color: #f3f4f8;
+      --surface: #ffffff;
+      --primary: #4f46e5;
+      --primary-glow: rgba(79, 70, 229, 0.25);
+      --accent: #10b981;
+      --accent-glow: rgba(16, 185, 129, 0.25);
+      --danger: #f43f5e;
+      --text-main: #0f172a;
+      --text-soft: #64748b;
       --border: #e2e8f0;
-      --radius: 14px;
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 28px;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Noto Sans Kannada', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Outfit', 'Noto Sans Kannada', sans-serif;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
     }
 
     body {
-      background: var(--bg);
-      color: var(--text);
+      background: var(--bg-color);
+      color: var(--text-main);
       display: flex;
       flex-direction: column;
       height: 100vh;
@@ -44,756 +47,712 @@
       overflow: hidden;
     }
 
-    /* Fixed Native Mobile App Header */
+    /* Glassmorphic Header */
     header {
-      background: #ffffff;
-      border-bottom: 1px solid var(--border);
-      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+      padding: 12px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       position: sticky;
       top: 0;
-      z-index: 30;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+      z-index: 40;
     }
 
-    .brand-wrap {
+    .brand {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
-    .brand-badge {
-      background: var(--primary);
+    .brand-icon {
+      background: linear-gradient(135deg, var(--primary), #818cf8);
       color: #fff;
       font-weight: 800;
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 12px var(--primary-glow);
     }
 
     .brand-title {
-      font-size: 1rem;
+      font-size: 1.15rem;
       font-weight: 800;
+      letter-spacing: -0.3px;
     }
 
-    .lang-btn-toggle {
-      border: 1px solid var(--border);
+    .lang-toggle {
       background: #f1f5f9;
       color: var(--primary);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 10px;
       font-weight: 700;
-      font-size: 0.8rem;
-      padding: 6px 10px;
-      border-radius: 8px;
+      font-size: 0.85rem;
       cursor: pointer;
+      transition: transform 0.1s;
     }
+    .lang-toggle:active { transform: scale(0.92); }
 
-    /* Main Scroll Area */
-    .mobile-body {
+    /* Main Scroll Workspace */
+    .workspace {
       flex: 1;
       overflow-y: auto;
-      padding: 10px;
-      padding-bottom: 85px;
+      padding: 14px;
+      padding-bottom: 110px;
       -webkit-overflow-scrolling: touch;
     }
 
-    .top-actions {
+    .search-row {
       display: flex;
-      gap: 8px;
-      margin-bottom: 10px;
-      position: sticky;
-      top: 0;
-      background: var(--bg);
-      padding-bottom: 6px;
-      z-index: 20;
+      gap: 10px;
+      margin-bottom: 16px;
     }
 
-    .mobile-search {
+    .search-bar {
       flex: 1;
-      padding: 10px 12px;
+      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 0.9rem;
-      background: #ffffff;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
       outline: none;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+      transition: all 0.2s;
       user-select: text;
     }
+    .search-bar:focus {
+      border-color: var(--primary);
+      box-shadow: 0 4px 15px var(--primary-glow);
+    }
 
-    .btn-add-item-touch {
+    .btn-add-item {
       background: var(--primary);
       color: #fff;
       border: none;
-      padding: 0 12px;
-      border-radius: 10px;
-      font-size: 0.82rem;
+      padding: 0 16px;
+      border-radius: var(--radius-sm);
       font-weight: 700;
+      font-size: 0.9rem;
       display: flex;
       align-items: center;
-      gap: 4px;
-      white-space: nowrap;
+      gap: 6px;
+      box-shadow: 0 4px 15px var(--primary-glow);
     }
+    .btn-add-item:active { transform: scale(0.95); }
 
-    /* 2-Column Responsive Card Grid */
-    .grid-container {
+    /* Modern 2-Column Grid */
+    .grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 9px;
+      gap: 12px;
     }
 
-    .touch-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 8px;
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      padding: 10px;
       display: flex;
       flex-direction: column;
       position: relative;
-      cursor: pointer;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-      transition: transform 0.1s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      border: 1px solid rgba(226, 232, 240, 0.5);
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .card:active {
+      transform: scale(0.96);
     }
 
-    .touch-card:active {
-      transform: scale(0.97);
-    }
-
-    .card-photo-box {
+    .card-img-wrap {
       width: 100%;
-      height: 95px;
-      background: #ffffff;
-      border-radius: 8px;
+      height: 110px;
+      background: #f8fafc;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
       overflow: hidden;
-      margin-bottom: 6px;
+      margin-bottom: 10px;
     }
 
-    .card-photo {
-      max-width: 100%;
-      max-height: 100%;
+    .card-img {
+      max-width: 90%;
+      max-height: 90%;
       object-fit: contain;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.08));
     }
 
-    .card-fallback-badge {
+    .fallback-gradient {
       width: 100%;
       height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #ffffff;
-      font-weight: 800;
-      font-size: 1.8rem;
-      border-radius: 8px;
-    }
-
-    .card-cat-pill {
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      background: rgba(15, 23, 42, 0.75);
       color: #fff;
-      font-size: 0.58rem;
-      padding: 2px 5px;
-      border-radius: 4px;
-      font-weight: 600;
+      font-size: 2.2rem;
+      font-weight: 800;
     }
 
-    .card-name {
-      font-size: 0.82rem;
+    .cat-tag {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(4px);
+      color: var(--text-main);
+      font-size: 0.6rem;
+      padding: 3px 6px;
+      border-radius: 6px;
+      font-weight: 700;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .card-title {
+      font-size: 0.88rem;
       font-weight: 700;
       line-height: 1.2;
+      margin-bottom: 4px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
       overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      margin-bottom: 2px;
+    }
+
+    .card-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
     }
 
     .card-price {
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: var(--primary);
-      margin-bottom: 6px;
-    }
-
-    /* Direct Stepper on Card */
-    .card-stepper {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #f1f5f9;
-      border-radius: 8px;
-      padding: 3px;
-    }
-
-    .card-stepper-btn {
-      width: 32px;
-      height: 32px;
-      border: none;
-      background: #ffffff;
-      color: var(--text);
       font-size: 1.1rem;
       font-weight: 800;
-      border-radius: 6px;
+      color: var(--primary);
+    }
+
+    .btn-stepper {
+      background: #f1f5f9;
+      border: none;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
-      cursor: pointer;
-    }
-
-    .card-stepper-btn.add-only {
-      width: 100%;
-      background: #eff6ff;
-      color: var(--primary);
-      font-size: 0.78rem;
-      font-weight: 700;
-      height: 32px;
-    }
-
-    .card-stepper-count {
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: var(--text);
-      min-width: 24px;
-      text-align: center;
-    }
-
-    /* Sticky Bottom Floating Bill Bar */
-    .mobile-bill-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #ffffff;
-      border-top: 1px solid var(--border);
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
-      z-index: 40;
-    }
-
-    .bill-bar-info {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .bill-bar-total {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--primary);
-      line-height: 1.1;
-    }
-
-    .bill-bar-items {
-      font-size: 0.75rem;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    .bill-bar-btn {
-      background: var(--accent);
-      color: #ffffff;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 12px;
-      font-size: 0.95rem;
-      font-weight: 800;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .bill-bar-btn:active {
-      background: var(--accent-active);
-    }
-
-    /* Bottom Checkout Drawer */
-    .drawer-scrim {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.45);
-      display: none;
-      align-items: flex-end;
-      z-index: 60;
-    }
-
-    .mobile-drawer {
-      background: #ffffff;
-      width: 100%;
-      max-height: 85vh;
-      border-radius: 20px 20px 0 0;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      animation: slideUp 0.18s ease-out;
-    }
-
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-
-    .drawer-top {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .drawer-top h3 {
-      font-size: 1rem;
-      font-weight: 800;
-    }
-
-    .btn-clear-cart {
-      background: none;
-      border: none;
-      color: var(--danger);
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .drawer-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 12px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .drawer-item-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #f8fafc;
-      padding: 8px 10px;
       border-radius: 10px;
-      border: 1px solid var(--border);
+      height: 34px;
     }
 
-    .drawer-item-info {
-      max-width: 130px;
+    .btn-stepper.add {
+      background: var(--primary);
+      color: #fff;
+      width: 34px;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 10px var(--primary-glow);
     }
 
-    .drawer-item-name {
-      font-size: 0.85rem;
-      font-weight: 700;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    .btn-stepper.active-step {
+      width: 100%;
+      justify-content: space-between;
+      padding: 0 4px;
+      background: var(--surface);
+      border: 1px solid var(--primary);
     }
 
-    .drawer-item-rate {
-      font-size: 0.72rem;
-      color: var(--muted);
-    }
-
-    .drawer-stepper {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .drawer-step-btn {
+    .step-icon {
       width: 28px;
       height: 28px;
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f1f5f9;
+      border-radius: 8px;
       font-weight: 800;
+      color: var(--text-main);
     }
 
-    .drawer-step-qty {
-      font-size: 0.9rem;
+    .step-val {
       font-weight: 800;
-      min-width: 20px;
-      text-align: center;
-    }
-
-    .drawer-item-sum {
       font-size: 0.95rem;
+      color: var(--primary);
+    }
+
+    /* Floating Pill Cart */
+    .floating-cart {
+      position: fixed;
+      bottom: 20px;
+      left: 5%;
+      width: 90%;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 12px 20px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      z-index: 50;
+      transform: translateY(0);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .floating-cart:active { transform: scale(0.96); }
+    
+    .floating-cart.hidden { transform: translateY(150px); }
+
+    .cart-info {
+      display: flex;
+      flex-direction: column;
+      color: #fff;
+    }
+
+    .cart-price {
+      font-size: 1.25rem;
       font-weight: 800;
-      min-width: 48px;
+      color: #34d399; /* vibrant mint */
+    }
+
+    .cart-count {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #94a3b8;
+    }
+
+    .btn-checkout-pill {
+      background: #fff;
+      color: var(--text-main);
+      border: none;
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Modern Bottom Sheet Drawer */
+    .scrim {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: flex-end;
+      z-index: 100;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .scrim.show { opacity: 1; }
+
+    .bottom-sheet {
+      background: var(--bg-color);
+      width: 100%;
+      max-height: 85vh;
+      border-radius: 32px 32px 0 0;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
+    }
+    .bottom-sheet.show { transform: translateY(0); }
+
+    .sheet-handle {
+      width: 40px;
+      height: 5px;
+      background: #cbd5e1;
+      border-radius: 5px;
+      margin: 12px auto;
+    }
+
+    .sheet-header {
+      padding: 0 20px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sheet-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .btn-clear {
+      background: rgba(244, 63, 94, 0.1);
+      color: var(--danger);
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    .sheet-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 20px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cart-row {
+      background: var(--surface);
+      padding: 12px;
+      border-radius: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    }
+
+    .row-info { max-width: 130px; }
+    .row-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 2px; }
+    .row-rate { font-size: 0.75rem; color: var(--text-soft); font-weight: 600; }
+    
+    .row-total {
+      font-size: 1.05rem;
+      font-weight: 800;
+      min-width: 55px;
       text-align: right;
     }
 
-    .drawer-bottom {
-      padding: 14px 16px;
-      background: #f8fafc;
-      border-top: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    .sheet-footer {
+      background: var(--surface);
+      padding: 20px;
+      border-radius: 32px 32px 0 0;
+      box-shadow: 0 -10px 25px rgba(0,0,0,0.03);
     }
 
-    /* Cash Chips for Fast Tapping */
-    .quick-cash-row {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 2px;
-    }
-
-    .cash-chip {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .cash-chip:active {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .drawer-calc-row {
+    .quick-cash {
       display: flex;
       gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .quick-cash::-webkit-scrollbar { display: none; }
+
+    .cash-pill {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      transition: background 0.1s;
+    }
+    .cash-pill:active { background: var(--primary); color: #fff; }
+
+    .calc-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
       align-items: center;
     }
 
-    .drawer-cash-input {
+    .input-glass {
       flex: 1;
-      padding: 10px;
+      background: #f8fafc;
       border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 0.95rem;
+      padding: 14px 16px;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 600;
       outline: none;
-      background: #fff;
       user-select: text;
     }
+    .input-glass:focus { border-color: var(--primary); }
 
-    .drawer-change-tag {
-      font-size: 0.9rem;
+    .change-label {
+      font-size: 0.95rem;
       font-weight: 800;
       color: var(--accent);
-      white-space: nowrap;
+      min-width: 100px;
+      text-align: right;
     }
 
-    .drawer-action-btns {
+    .sheet-btns {
       display: flex;
-      gap: 8px;
+      gap: 12px;
     }
 
     .btn-close-sheet {
-      background: #e2e8f0;
+      background: #f1f5f9;
+      color: var(--text-main);
       border: none;
-      padding: 12px 16px;
-      border-radius: 10px;
+      padding: 16px;
+      border-radius: 16px;
       font-weight: 700;
-      cursor: pointer;
+      font-size: 1rem;
+      width: 30%;
     }
 
-    .btn-complete-sheet {
+    .btn-pay {
       flex: 1;
-      background: var(--accent);
+      background: linear-gradient(135deg, var(--accent), #059669);
       color: #fff;
       border: none;
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 0.95rem;
+      padding: 16px;
+      border-radius: 16px;
       font-weight: 800;
-      cursor: pointer;
+      font-size: 1.05rem;
+      box-shadow: 0 8px 20px var(--accent-glow);
     }
+    .btn-pay:active { transform: scale(0.97); }
 
-    /* Modal dialogs */
-    .modal-backdrop {
+    /* Modal Form / Receipt Styles */
+    .center-modal {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(15,23,42,0.6);
+      backdrop-filter: blur(4px);
       display: none;
       align-items: center;
       justify-content: center;
-      z-index: 100;
-      padding: 14px;
+      z-index: 120;
+      padding: 20px;
     }
-
-    .modal-sheet {
-      background: #ffffff;
+    
+    .dialog-box {
+      background: var(--surface);
       width: 100%;
-      max-width: 330px;
-      border-radius: 14px;
-      padding: 18px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      max-width: 340px;
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     }
 
-    .form-row {
-      margin-bottom: 10px;
-    }
-
-    .form-row label {
-      display: block;
-      font-size: 0.78rem;
-      font-weight: 700;
-      margin-bottom: 3px;
-    }
-
+    .form-group { margin-bottom: 12px; }
+    .form-group label { font-size: 0.8rem; font-weight: 700; margin-bottom: 4px; display: block;}
     .form-input {
-      width: 100%;
-      padding: 8px 10px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 0.88rem;
-      outline: none;
-      user-select: text;
+      width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border);
+      background: #f8fafc; font-size: 0.9rem; outline: none; user-select: text;
     }
 
-    .modal-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 14px;
+    .receipt-print {
+      text-align: center;
     }
+    .receipt-table { width: 100%; font-size: 0.85rem; text-align: left; margin: 15px 0; border-collapse: collapse; }
+    .receipt-table th { border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+    .receipt-table td { padding: 6px 0; }
 
-    .btn-modal-save {
-      flex: 1;
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 10px;
-      border-radius: 8px;
-      font-weight: 700;
-    }
-
-    .btn-modal-cancel {
-      background: #f1f5f9;
-      border: 1px solid var(--border);
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-weight: 600;
-    }
-
-    /* Receipt Print Styling */
+    /* Print specific */
     @media print {
-      body * {
-        visibility: hidden;
-      }
-      .modal-sheet.printable, .modal-sheet.printable * {
-        visibility: visible;
-      }
-      .modal-sheet.printable {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        box-shadow: none;
-        padding: 0;
-      }
-      .modal-actions {
-        display: none !important;
-      }
+      body * { visibility: hidden; }
+      .dialog-box.printable, .dialog-box.printable * { visibility: visible; }
+      .dialog-box.printable { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border-radius: 0; }
+      .sheet-btns { display: none !important; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top App Bar -->
+  <!-- Floating Glass Header -->
   <header>
-    <div class="brand-wrap">
-      <div class="brand-badge">₹</div>
+    <div class="brand">
+      <div class="brand-icon">₹</div>
       <div class="brand-title" id="uiAppName">Shop POS</div>
     </div>
-    <button class="lang-btn-toggle" onclick="toggleLanguage()" id="langToggleBtn">ಕನ್ನಡ / EN</button>
+    <button class="lang-toggle" onclick="toggleLanguage()" id="langToggleBtn">ಕನ್ನಡ</button>
   </header>
 
   <!-- Product Catalog -->
-  <main class="mobile-body">
-    <div class="top-actions">
-      <input type="text" id="searchInput" class="mobile-search" placeholder="🔍 Search product..." oninput="handleSearch()" />
-      <button class="btn-add-item-touch" onclick="openAddModal()">
-        <span>➕</span> Add
+  <main class="workspace">
+    <div class="search-row">
+      <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Search item..." oninput="handleSearch()" />
+      <button class="btn-add-item" onclick="openAddModal()">
+        <span>➕</span> <span id="uiAddTxt">Add</span>
       </button>
     </div>
-    <div class="grid-container" id="productGrid"></div>
+    <div class="grid" id="productGrid"></div>
   </main>
 
-  <!-- Sticky Bottom Cart Button -->
-  <div class="mobile-bill-bar">
-    <div class="bill-bar-info">
-      <span class="bill-bar-total" id="barTotal">₹0</span>
-      <span class="bill-bar-items"><span id="barCount">0</span> <span id="uiItemsLabel">items</span></span>
+  <!-- Premium Floating Pill Cart -->
+  <div class="floating-cart hidden" id="floatCart" onclick="openDrawer()">
+    <div class="cart-info">
+      <div class="cart-price" id="pillTotal">₹0</div>
+      <div class="cart-count"><span id="pillCount">0</span> <span id="uiPillItems">items</span></div>
     </div>
-    <button class="bill-bar-btn" onclick="openDrawer()">
-      <span id="uiViewBillLabel">View Bill</span> 🛒
+    <button class="btn-checkout-pill">
+      <span id="uiViewBill">View Bill</span> 🛒
     </button>
   </div>
 
-  <!-- Bottom Drawer Bill Sheet -->
-  <div class="drawer-scrim" id="drawerScrim">
-    <div class="mobile-drawer">
-      <div class="drawer-top">
-        <h3 id="uiOrderTitle">Current Order</h3>
-        <button class="btn-clear-cart" onclick="clearCart()" id="uiClearLabel">Clear All</button>
+  <!-- Bottom Sheet Cart Drawer -->
+  <div class="scrim" id="drawerScrim" onclick="closeDrawer(event)">
+    <div class="bottom-sheet" id="bottomSheet" onclick="event.stopPropagation()">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h3 class="sheet-title" id="uiOrderTitle">Current Order</h3>
+        <button class="btn-clear" onclick="clearCart()" id="uiClearBtn">Clear</button>
       </div>
 
-      <div class="drawer-list" id="drawerList"></div>
+      <div class="sheet-body" id="drawerList"></div>
 
-      <div class="drawer-bottom">
-        <!-- Quick cash buttons -->
-        <div class="quick-cash-row">
-          <button class="cash-chip" onclick="quickCash(10)">+₹10</button>
-          <button class="cash-chip" onclick="quickCash(50)">+₹50</button>
-          <button class="cash-chip" onclick="quickCash(100)">+₹100</button>
-          <button class="cash-chip" onclick="quickCash(500)">+₹500</button>
-          <button class="cash-chip" onclick="exactCash()">Exact</button>
+      <div class="sheet-footer">
+        <!-- Quick Cash Chips -->
+        <div class="quick-cash">
+          <button class="cash-pill" onclick="vibrate(); quickCash(10)">+₹10</button>
+          <button class="cash-pill" onclick="vibrate(); quickCash(50)">+₹50</button>
+          <button class="cash-pill" onclick="vibrate(); quickCash(100)">+₹100</button>
+          <button class="cash-pill" onclick="vibrate(); quickCash(500)">+₹500</button>
+          <button class="cash-pill" style="background:var(--primary); color:#fff; border:none;" onclick="vibrate(); exactCash()">Exact</button>
         </div>
 
-        <div class="drawer-calc-row">
-          <input type="number" id="cashGivenInput" class="drawer-cash-input" placeholder="Cash Given (₹)" oninput="calcChange()" />
-          <span class="drawer-change-tag" id="changeText">Change: ₹0</span>
+        <div class="calc-row">
+          <input type="number" id="cashGivenInput" class="input-glass" placeholder="Cash Given (₹)" oninput="calcChange()" />
+          <div class="change-label" id="changeText">Change: ₹0</div>
         </div>
 
-        <div class="drawer-action-btns">
+        <div class="sheet-btns">
           <button class="btn-close-sheet" onclick="closeDrawer()" id="uiCloseLabel">Close</button>
-          <button class="btn-complete-sheet" onclick="generateBill()" id="uiBillActionLabel">Print Bill (₹<span id="drawerTotalSum">0</span>)</button>
+          <button class="btn-pay" onclick="vibrate(); generateBill()" id="uiPayLabel">Print (₹<span id="drawerTotalSum">0</span>)</button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Add Custom Item Dialog -->
-  <div class="modal-backdrop" id="addItemModal">
-    <div class="modal-sheet">
-      <h3 style="font-size: 1rem; margin-bottom: 10px;" id="uiNewItemTitle">Add Product to Shop</h3>
-      <div class="form-row">
+  <div class="center-modal" id="addItemModal">
+    <div class="dialog-box">
+      <h3 style="font-size: 1.1rem; margin-bottom: 16px;" id="uiNewItemTitle">Add Product</h3>
+      <div class="form-group">
         <label id="uiLblEn">Name (English) *</label>
-        <input type="text" id="addNameEn" class="form-input" placeholder="e.g. Classic / Vimal" required />
+        <input type="text" id="addNameEn" class="form-input" placeholder="e.g. Shikhar" required />
       </div>
-      <div class="form-row">
+      <div class="form-group">
         <label id="uiLblKn">Name (ಕನ್ನಡ)</label>
-        <input type="text" id="addNameKn" class="form-input" placeholder="ಉದಾ: ಕ್ಲಾಸಿಕ್" />
+        <input type="text" id="addNameKn" class="form-input" placeholder="ಉದಾ: ಶಿಖರ್" />
       </div>
-      <div class="form-row">
-        <label id="uiLblCost">Price / ಬೆಲೆ (₹) *</label>
+      <div class="form-group">
+        <label id="uiLblCost">Price (₹) *</label>
         <input type="number" id="addPrice" class="form-input" placeholder="e.g. 50" required />
       </div>
-      <div class="form-row">
+      <div class="form-group">
         <label id="uiLblCat">Category</label>
-        <input type="text" id="addCat" class="form-input" placeholder="Paan Masala, Beedi, Cigarette" />
+        <input type="text" id="addCat" class="form-input" placeholder="e.g. Tobacco" />
       </div>
-      <div class="form-row">
+      <div class="form-group">
         <label id="uiLblPhoto">Select Photo</label>
-        <input type="file" id="addPhotoFile" accept="image/*" class="form-input" style="padding: 4px;" />
+        <input type="file" id="addPhotoFile" accept="image/*" class="form-input" style="padding: 6px;" />
       </div>
-      <div class="modal-actions">
-        <button class="btn-modal-cancel" onclick="closeAddModal()" id="uiBtnCancel">Cancel</button>
-        <button class="btn-modal-save" onclick="saveCustomItem()" id="uiBtnSave">Save</button>
+      <div class="sheet-btns" style="margin-top: 20px;">
+        <button class="btn-close-sheet" onclick="closeAddModal()" id="uiBtnCancel">Cancel</button>
+        <button class="btn-pay" onclick="vibrate(); saveCustomItem()" id="uiBtnSave">Save Item</button>
       </div>
     </div>
   </div>
 
   <!-- Printable Invoice Dialog -->
-  <div class="modal-backdrop" id="invoiceModal">
-    <div class="modal-sheet printable">
-      <div style="text-align:center; border-bottom:1px dashed #cbd5e1; padding-bottom:8px; margin-bottom:8px;">
-        <h3 style="font-size:1.05rem; font-weight:800;" id="uiShopHeader">RETAIL STORE</h3>
-        <p style="font-size:0.75rem; color:#64748b;" id="uiInvoiceMemo">Tax Invoice / Cash Memo</p>
-        <p style="font-size:0.7rem; color:#64748b;" id="invoiceTimeDisplay"></p>
-      </div>
+  <div class="center-modal" id="invoiceModal">
+    <div class="dialog-box printable receipt-print">
+      <h3 style="font-size: 1.2rem; font-weight: 800;" id="uiShopHeader">RETAIL STORE</h3>
+      <p style="font-size: 0.75rem; color: var(--text-soft);" id="uiInvoiceMemo">Tax Invoice / Cash Memo</p>
+      <p style="font-size: 0.75rem; color: var(--text-soft); margin-bottom: 10px;" id="invoiceTimeDisplay"></p>
 
-      <table style="width:100%; font-size:0.82rem; border-collapse:collapse; margin-bottom:8px;">
+      <table class="receipt-table">
         <thead>
-          <tr style="border-bottom:1px solid #cbd5e1;">
-            <th style="text-align:left; padding:4px 0;" id="uiThItem">Item</th>
-            <th style="text-align:center; padding:4px 0;" id="uiThQty">Qty</th>
-            <th style="text-align:right; padding:4px 0;" id="uiThPrice">Price</th>
+          <tr>
+            <th id="uiThItem">Item</th>
+            <th style="text-align: center;" id="uiThQty">Qty</th>
+            <th style="text-align: right;" id="uiThPrice">Total</th>
           </tr>
         </thead>
         <tbody id="invoiceTableBody"></tbody>
       </table>
 
-      <div style="border-top:1px dashed #cbd5e1; padding-top:6px; font-size:0.85rem;">
-        <div style="display:flex; justify-content:space-between; font-weight:800;">
-          <span id="uiNetLabel">Total Payable:</span>
+      <div style="border-top: 1px dashed var(--border); padding-top: 12px; margin-top: 12px; font-size: 0.9rem;">
+        <div style="display:flex; justify-content:space-between; font-weight:800; margin-bottom:4px;">
+          <span id="uiNetLabel">Payable:</span>
           <span id="invoiceTotalVal">₹0</span>
         </div>
-        <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:#64748b; margin-top:2px;">
+        <div style="display:flex; justify-content:space-between; color:var(--text-soft); margin-bottom:4px;">
           <span id="uiPaidLabel">Cash Paid:</span>
           <span id="invoicePaidVal">₹0</span>
         </div>
-        <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:#64748b;">
+        <div style="display:flex; justify-content:space-between; color:var(--text-soft);">
           <span id="uiChangeLabel">Change Returned:</span>
           <span id="invoiceChangeVal">₹0</span>
         </div>
-        <p style="text-align:center; font-size:0.78rem; margin-top:10px; color:#16a34a; font-weight:700;" id="uiThanksNote">Thank you! Visit again.</p>
       </div>
+      <p style="font-size: 0.85rem; font-weight: 700; color: var(--accent); margin-top: 20px;" id="uiThanksNote">Thank you! Visit again.</p>
 
-      <div class="modal-actions">
-        <button class="btn-modal-cancel" onclick="closeInvoiceModal()" id="uiBtnCloseInvoice">Close</button>
-        <button class="btn-modal-save" onclick="window.print()" id="uiBtnPrint">🖨️ Print</button>
+      <div class="sheet-btns" style="margin-top: 24px;">
+        <button class="btn-close-sheet" onclick="closeInvoiceModal()" id="uiBtnCloseInvoice">Close</button>
+        <button class="btn-pay" onclick="vibrate(); window.print()" id="uiBtnPrint">🖨️ Print</button>
       </div>
     </div>
   </div>
 
   <script>
-    const strings = {
+    // --- Haptic Feedback Wrapper ---
+    function vibrate() {
+      if (navigator.vibrate) navigator.vibrate(40);
+    }
+
+    const dict = {
       en: {
-        appName: "Shop POS",
-        search: "🔍 Search product...",
-        items: "items",
+        app: "Shop POS",
+        search: "🔍 Search item...",
+        toggle: "ಕನ್ನಡ",
+        addTxt: "Add",
+        pillItems: "items",
         viewBill: "View Bill",
         orderTitle: "Current Order",
-        clear: "Clear All",
+        clear: "Clear",
+        empty: "Cart is empty.<br>Tap items to add.",
         cashPlaceholder: "Cash Given (₹)",
         changeText: "Change: ₹0",
-        changePrefix: "Change: ₹",
-        duePrefix: "Due: ₹",
-        printBtn: "Print Bill",
+        changePre: "Change: ₹",
+        duePre: "Due: ₹",
         close: "Close",
-        empty: "Cart is empty.<br>Tap any item to add.",
-        addText: "+ Add",
-        newTitle: "Add Product to Shop",
+        payLabel: "Print",
+        newTitle: "Add Product",
         lblEn: "Name (English) *",
         lblKn: "Name (ಕನ್ನಡ)",
         lblCost: "Price (₹) *",
         lblCat: "Category",
         lblPhoto: "Select Photo",
         cancel: "Cancel",
-        save: "Save",
+        save: "Save Item",
         shopHeader: "RETAIL STORE",
         invoiceMemo: "Tax Invoice / Cash Memo",
         thItem: "Item",
         thQty: "Qty",
-        thPrice: "Price",
-        net: "Total Payable:",
+        thPrice: "Total",
+        net: "Payable:",
         paid: "Cash Paid:",
         change: "Change Returned:",
         thanks: "Thank you! Visit again.",
         print: "🖨️ Print"
       },
       kn: {
-        appName: "ಅಂಗಡಿ POS",
+        app: "ಅಂಗಡಿ POS",
         search: "🔍 ಐಟಂ ಹುಡುಕಿ...",
-        items: "ಐಟಂಗಳು",
+        toggle: "EN",
+        addTxt: "ಸೇರಿಸಿ",
+        pillItems: "ಐಟಂಗಳು",
         viewBill: "ಬಿಲ್ ನೋಡಿ",
         orderTitle: "ಪ್ರಸ್ತುತ ಆರ್ಡರ್",
-        clear: "ಎಲ್ಲಾ ಅಳಿಸು",
+        clear: "ಅಳಿಸು",
+        empty: "ಯಾವುದೇ ಐಟಂ ಇಲ್ಲ.<br>ಸೇರಿಸಲು ಐಟಂ ಒತ್ತಿ.",
         cashPlaceholder: "ನೀಡಿದ ಹಣ (₹)",
         changeText: "ಬಾಕಿ: ₹0",
-        changePrefix: "ಬಾಕಿ: ₹",
-        duePrefix: "ಉಳಿಕೆ: ₹",
-        printBtn: "ಬಿಲ್ ಪ್ರಿಂಟ್",
+        changePre: "ಬಾಕಿ: ₹",
+        duePre: "ಉಳಿಕೆ: ₹",
         close: "ಮುಚ್ಚು",
-        empty: "ಯಾವುದೇ ಐಟಂ ಇಲ್ಲ.<br>ಸೇರಿಸಲು ಐಟಂ ಒತ್ತಿ.",
-        addText: "+ ಸೇರಿಸಿ",
-        newTitle: "ಅಂಗಡಿಗೆ ಹೊಸ ಐಟಂ",
+        payLabel: "ಪ್ರಿಂಟ್",
+        newTitle: "ಹೊಸ ಐಟಂ ಸೇರಿಸಿ",
         lblEn: "ಹೆಸರು (ಇಂಗ್ಲಿಷ್) *",
         lblKn: "ಹೆಸರು (ಕನ್ನಡ)",
         lblCost: "ಬೆಲೆ (₹) *",
@@ -805,7 +764,7 @@
         invoiceMemo: "ಖರೀದಿ ರಶೀದಿ / ಕ್ಯಾಶ್ ಮೆಮೊ",
         thItem: "ಐಟಂ",
         thQty: "ಪ್ರಮಾಣ",
-        thPrice: "ಬೆಲೆ",
+        thPrice: "ಮೊತ್ತ",
         net: "ಒಟ್ಟು ಪಾವತಿ:",
         paid: "ಸ್ವೀಕರಿಸಿದ ನಗದು:",
         change: "ಮರಳಿಸಿದ ಬಾಕಿ:",
@@ -814,54 +773,57 @@
       }
     };
 
-    // Master Catalog (All items from Book.xlsx + Book1.xlsx)
+    // Master Catalog (Book.xlsx + Book1.xlsx)
     const masterStock = [
-      { id: 101, nameEn: "Ganesh", nameKn: "ಗಣೇಶ್ ಬೀಡಿ", cost: 480, catEn: "Beedi", catKn: "ಬೀಡಿ", img: "images/ganesh.jpg", color: "#b45309" },
-      { id: 102, nameEn: "9 No", nameKn: "೯ ನಂ ಬೀಡಿ", cost: 410, catEn: "Beedi", catKn: "ಬೀಡಿ", img: "images/9no.jpg", color: "#c2410c" },
-      { id: 103, nameEn: "9 No Small", nameKn: "೯ ನಂ ಸಣ್ಣದು", cost: 215, catEn: "Beedi", catKn: "ಬೀಡಿ", img: "images/9no-small.jpg", color: "#ea580c" },
-      { id: 104, nameEn: "Bigg Bieddi", nameKn: "ದೊಡ್ಡ ಬೀಡಿ", cost: 265, catEn: "Beedi", catKn: "ಬೀಡಿ", img: "images/bigg-bieddi.jpg", color: "#9a3412" },
-      { id: 105, nameEn: "Player's", nameKn: "ಪ್ಲೇಯರ್ಸ್", cost: 107, catEn: "Cigarette", catKn: "ಸಿಗರೇಟ್", img: "images/players.jpg", color: "#1d4ed8" },
-      { id: 106, nameEn: "Birstal", nameKn: "ಬ್ರಿಸ್ಟಲ್", cost: 82, catEn: "Cigarette", catKn: "ಸಿಗರೇಟ್", img: "images/birstal.jpg", color: "#4338ca" },
-      { id: 107, nameEn: "Kashaish", nameKn: "ಕಶಿಶ್", cost: 85, catEn: "Pouch", catKn: "ಪೌಚ್", img: "images/kashaish.jpg", color: "#6d28d9" },
-      { id: 108, nameEn: "Anni", nameKn: "ಅನ್ನಿ", cost: 50, catEn: "Pouch", catKn: "ಪೌಚ್", img: "images/anni.jpg", color: "#7e22ce" },
-      { id: 109, nameEn: "Google", nameKn: "ಗೂಗಲ್", cost: 35, catEn: "Tobacco", catKn: "ತಂಬಾಕು", img: "images/google.jpg", color: "#0369a1" },
-      { id: 110, nameEn: "Sope", nameKn: "ಸೋಪು", cost: 27, catEn: "General", catKn: "ಜನರಲ್", img: "images/sope.jpg", color: "#047857" },
-      { id: 111, nameEn: "Indment", nameKn: "ಇಂಟ್‌ಮೆಂಟ್", cost: 114, catEn: "General", catKn: "ಜನರಲ್", img: "images/indment.jpg", color: "#0f766e" },
-      { id: 112, nameEn: "Black", nameKn: "ಬ್ಲಾಕ್", cost: 100, catEn: "Cigarette", catKn: "ಸಿಗರೇಟ್", img: "images/black.jpg", color: "#334155" },
-      { id: 113, nameEn: "Chinikan", nameKn: "ಚಿನಿಕನ್", cost: 350, catEn: "Pouch", catKn: "ಪೌಚ್", img: "images/chinikan.jpg", color: "#b91c1c" },
-      { id: 114, nameEn: "Bira", nameKn: "ಬೀರಾ", cost: 50, catEn: "Pouch", catKn: "ಪೌಚ್", img: "images/bira.jpg", color: "#be123c" },
-      { id: 115, nameEn: "Crane (2)", nameKn: "ಕ್ರೇನ್ (೨)", cost: 105, catEn: "Betel Nut", catKn: "ಅಡಿಕೆ ಪುಡಿ", img: "images/crane2.jpg", color: "#a16207" },
-      { id: 116, nameEn: "Crane (5)", nameKn: "ಕ್ರೇನ್ (೫)", cost: 130, catEn: "Betel Nut", catKn: "ಅಡಿಕೆ ಪುಡಿ", img: "images/crane5.jpg", color: "#854d0e" },
-      { id: 117, nameEn: "Crane (10)", nameKn: "ಕ್ರೇನ್ (೧೦)", cost: 175, catEn: "Betel Nut", catKn: "ಅಡಿಕೆ ಪುಡಿ", img: "images/crane10.jpg", color: "#713f12" },
-      { id: 118, nameEn: "Chinikan (Small)", nameKn: "ಚಿನಿಕನ್ ಸಣ್ಣದು", cost: 135, catEn: "Pouch", catKn: "ಪೌಚ್", img: "images/chinikan-small.jpg", color: "#991b1b" },
-      { id: 119, nameEn: "Anurag", nameKn: "ಅನುರಾಗ್", cost: 42, catEn: "Tobacco", catKn: "ತಂಬಾಕು", img: "images/anurag.jpg", color: "#c026d3" },
-      { id: 120, nameEn: "Nelu Gold", nameKn: "ನೇಲು ಗೋಲ್ಡ್", cost: 50, catEn: "Pouch", catKn: "ಪೌಚ್", img: "images/nelu-gold.jpg", color: "#ca8a04" },
-      { id: 121, nameEn: "Vimal (Big)", nameKn: "ವಿಮಲ್ (ದೊಡ್ಡದು)", cost: 180, catEn: "Paan Masala", catKn: "ಪಾನ್ ಮಸಾಲಾ", img: "images/vimal-big.jpg", color: "#d97706" },
-      { id: 1, nameEn: "Vimal", nameKn: "ವಿಮಲ್", cost: 123, catEn: "Paan Masala", catKn: "ಪಾನ್ ಮಸಾಲಾ", img: "images/vimal.jpg", color: "#d97706" },
-      { id: 2, nameEn: "Hira", nameKn: "ಹೀರಾ", cost: 175, catEn: "Paan Masala", catKn: "ಪಾನ್ ಮಸಾಲಾ", img: "images/hira.jpg", color: "#dc2626" },
-      { id: 3, nameEn: "Kashisah", nameKn: "ಕಶಿಶ್", cost: 50, catEn: "Pouch", catKn: "ಪೌಚ್", img: "images/kashish.jpg", color: "#7c3aed" },
-      { id: 4, nameEn: "Kashish (2)", nameKn: "ಕಶಿಶ್ (೨)", cost: 50, catEn: "Pouch", catKn: "ಪೌಚ್", img: "images/kashish2.jpg", color: "#4f46e5" },
-      { id: 5, nameEn: "Hello", nameKn: "ಹೆಲೋ", cost: 35, catEn: "Tobacco", catKn: "ತಂಬಾಕು", img: "images/hello.jpg", color: "#db2777" },
-      { id: 6, nameEn: "Gold", nameKn: "ಗೋಲ್ಡ್ ಫ್ಲೇಕ್", cost: 120, catEn: "Cigarette", catKn: "ಸಿಗರೇಟ್", img: "images/gold.jpg", color: "#ca8a04" },
-      { id: 7, nameEn: "King", nameKn: "ಕಿಂಗ್ಸ್", cost: 223, catEn: "Cigarette", catKn: "ಸಿಗರೇಟ್", img: "images/king.jpg", color: "#0284c7" },
-      { id: 8, nameEn: "Light King", nameKn: "ಲೈಟ್ ಕಿಂಗ್", cost: 223, catEn: "Cigarette", catKn: "ಸಿಗರೇಟ್", img: "images/light-king.jpg", color: "#0d9488" }
+      { id: 101, nameEn: "Ganesh", nameKn: "ಗಣೇಶ್ ಬೀಡಿ", cost: 480, catEn: "Beedi", catKn: "ಬೀಡಿ", img: "images/ganesh.jpg", color: "linear-gradient(135deg, #ea580c, #9a3412)" },
+      { id: 102, nameEn: "9 No", nameKn: "೯ ನಂ ಬೀಡಿ", cost: 410, catEn: "Beedi", catKn: "ಬೀಡಿ", img: "images/9no.jpg", color: "linear-gradient(135deg, #c2410c, #7c2d12)" },
+      { id: 103, nameEn: "9 No Small", nameKn: "೯ ನಂ ಸಣ್ಣದು", cost: 215, catEn: "Beedi", catKn: "ಬೀಡಿ", img: "images/9no-small.jpg", color: "linear-gradient(135deg, #f97316, #c2410c)" },
+      { id: 104, nameEn: "Bigg Bieddi", nameKn: "ದೊಡ್ಡ ಬೀಡಿ", cost: 265, catEn: "Beedi", catKn: "ಬೀಡಿ", img: "images/bigg-bieddi.jpg", color: "linear-gradient(135deg, #b45309, #78350f)" },
+      { id: 105, nameEn: "Player's", nameKn: "ಪ್ಲೇಯರ್ಸ್", cost: 107, catEn: "Cigarette", catKn: "ಸಿಗರೇಟ್", img: "images/players.jpg", color: "linear-gradient(135deg, #3b82f6, #1d4ed8)" },
+      { id: 106, nameEn: "Birstal", nameKn: "ಬ್ರಿಸ್ಟಲ್", cost: 82, catEn: "Cigarette", catKn: "ಸಿಗರೇಟ್", img: "images/birstal.jpg", color: "linear-gradient(135deg, #6366f1, #4338ca)" },
+      { id: 107, nameEn: "Kashaish", nameKn: "ಕಶಿಶ್", cost: 85, catEn: "Pouch", catKn: "ಪೌಚ್", img: "images/kashaish.jpg", color: "linear-gradient(135deg, #8b5cf6, #6d28d9)" },
+      { id: 108, nameEn: "Anni", nameKn: "ಅನ್ನಿ", cost: 50, catEn: "Pouch", catKn: "ಪೌಚ್", img: "images/anni.jpg", color: "linear-gradient(135deg, #a855f7, #7e22ce)" },
+      { id: 109, nameEn: "Google", nameKn: "ಗೂಗಲ್", cost: 35, catEn: "Tobacco", catKn: "ತಂಬಾಕು", img: "images/google.jpg", color: "linear-gradient(135deg, #0ea5e9, #0369a1)" },
+      { id: 110, nameEn: "Sope", nameKn: "ಸೋಪು", cost: 27, catEn: "General", catKn: "ಜನರಲ್", img: "images/sope.jpg", color: "linear-gradient(135deg, #10b981, #047857)" },
+      { id: 111, nameEn: "Indment", nameKn: "ಇಂಟ್‌ಮೆಂಟ್", cost: 114, catEn: "General", catKn: "ಜನರಲ್", img: "images/indment.jpg", color: "linear-gradient(135deg, #14b8a6, #0f766e)" },
+      { id: 112, nameEn: "Black", nameKn: "ಬ್ಲಾಕ್", cost: 100, catEn: "Cigarette", catKn: "ಸಿಗರೇಟ್", img: "images/black.jpg", color: "linear-gradient(135deg, #64748b, #334155)" },
+      { id: 113, nameEn: "Chinikan", nameKn: "ಚಿನಿಕನ್", cost: 350, catEn: "Pouch", catKn: "ಪೌಚ್", img: "images/chinikan.jpg", color: "linear-gradient(135deg, #ef4444, #b91c1c)" },
+      { id: 114, nameEn: "Bira", nameKn: "ಬೀರಾ", cost: 50, catEn: "Pouch", catKn: "ಪೌಚ್", img: "images/bira.jpg", color: "linear-gradient(135deg, #f43f5e, #be123c)" },
+      { id: 115, nameEn: "Crane (2)", nameKn: "ಕ್ರೇನ್ (೨)", cost: 105, catEn: "Betel Nut", catKn: "ಅಡಿಕೆ ಪುಡಿ", img: "images/crane2.jpg", color: "linear-gradient(135deg, #d97706, #a16207)" },
+      { id: 116, nameEn: "Crane (5)", nameKn: "ಕ್ರೇನ್ (೫)", cost: 130, catEn: "Betel Nut", catKn: "ಅಡಿಕೆ ಪುಡಿ", img: "images/crane5.jpg", color: "linear-gradient(135deg, #b45309, #854d0e)" },
+      { id: 117, nameEn: "Crane (10)", nameKn: "ಕ್ರೇನ್ (೧೦)", cost: 175, catEn: "Betel Nut", catKn: "ಅಡಿಕೆ ಪುಡಿ", img: "images/crane10.jpg", color: "linear-gradient(135deg, #92400e, #713f12)" },
+      { id: 118, nameEn: "Chinikan (Small)", nameKn: "ಚಿನಿಕನ್ ಸಣ್ಣದು", cost: 135, catEn: "Pouch", catKn: "ಪೌಚ್", img: "images/chinikan-small.jpg", color: "linear-gradient(135deg, #dc2626, #991b1b)" },
+      { id: 119, nameEn: "Anurag", nameKn: "ಅನುರಾಗ್", cost: 42, catEn: "Tobacco", catKn: "ತಂಬಾಕು", img: "images/anurag.jpg", color: "linear-gradient(135deg, #d946ef, #c026d3)" },
+      { id: 120, nameEn: "Nelu Gold", nameKn: "ನೇಲು ಗೋಲ್ಡ್", cost: 50, catEn: "Pouch", catKn: "ಪೌಚ್", img: "images/nelu-gold.jpg", color: "linear-gradient(135deg, #eab308, #ca8a04)" },
+      { id: 121, nameEn: "Vimal (Big)", nameKn: "ವಿಮಲ್ (ದೊಡ್ಡದು)", cost: 180, catEn: "Paan Masala", catKn: "ಪಾನ್ ಮಸಾಲಾ", img: "images/vimal-big.jpg", color: "linear-gradient(135deg, #f59e0b, #d97706)" },
+      { id: 1, nameEn: "Vimal", nameKn: "ವಿಮಲ್", cost: 123, catEn: "Paan Masala", catKn: "ಪಾನ್ ಮಸಾಲಾ", img: "images/vimal.jpg", color: "linear-gradient(135deg, #f59e0b, #d97706)" },
+      { id: 2, nameEn: "Hira", nameKn: "ಹೀರಾ", cost: 175, catEn: "Paan Masala", catKn: "ಪಾನ್ ಮಸಾಲಾ", img: "images/hira.jpg", color: "linear-gradient(135deg, #ef4444, #dc2626)" },
+      { id: 3, nameEn: "Kashisah", nameKn: "ಕಶಿಶ್", cost: 50, catEn: "Pouch", catKn: "ಪೌಚ್", img: "images/kashish.jpg", color: "linear-gradient(135deg, #8b5cf6, #7c3aed)" },
+      { id: 4, nameEn: "Kashish (2)", nameKn: "ಕಶಿಶ್ (೨)", cost: 50, catEn: "Pouch", catKn: "ಪೌಚ್", img: "images/kashish2.jpg", color: "linear-gradient(135deg, #6366f1, #4f46e5)" },
+      { id: 5, nameEn: "Hello", nameKn: "ಹೆಲೋ", cost: 35, catEn: "Tobacco", catKn: "ತಂಬಾಕು", img: "images/hello.jpg", color: "linear-gradient(135deg, #ec4899, #db2777)" },
+      { id: 6, nameEn: "Gold", nameKn: "ಗೋಲ್ಡ್ ಫ್ಲೇಕ್", cost: 120, catEn: "Cigarette", catKn: "ಸಿಗರೇಟ್", img: "images/gold.jpg", color: "linear-gradient(135deg, #eab308, #ca8a04)" },
+      { id: 7, nameEn: "King", nameKn: "ಕಿಂಗ್ಸ್", cost: 223, catEn: "Cigarette", catKn: "ಸಿಗರೇಟ್", img: "images/king.jpg", color: "linear-gradient(135deg, #0ea5e9, #0284c7)" },
+      { id: 8, nameEn: "Light King", nameKn: "ಲೈಟ್ ಕಿಂಗ್", cost: 223, catEn: "Cigarette", catKn: "ಸಿಗರೇಟ್", img: "images/light-king.jpg", color: "linear-gradient(135deg, #14b8a6, #0d9488)" }
     ];
 
-    let customItems = JSON.parse(localStorage.getItem("pos_mobile_custom")) || [];
+    let customItems = JSON.parse(localStorage.getItem("pos_pro_custom")) || [];
     let items = [...customItems, ...masterStock];
     let cart = {};
     let lang = "en";
 
     function toggleLanguage() {
+      vibrate();
       lang = lang === "en" ? "kn" : "en";
-      const s = strings[lang];
+      const s = dict[lang];
 
-      document.getElementById("uiAppName").innerText = s.appName;
+      document.getElementById("langToggleBtn").innerText = s.toggle;
+      document.getElementById("uiAppName").innerText = s.app;
       document.getElementById("searchInput").placeholder = s.search;
-      document.getElementById("uiItemsLabel").innerText = s.items;
-      document.getElementById("uiViewBillLabel").innerText = s.viewBill;
+      document.getElementById("uiAddTxt").innerText = s.addTxt;
+      document.getElementById("uiPillItems").innerText = s.pillItems;
+      document.getElementById("uiViewBill").innerText = s.viewBill;
       document.getElementById("uiOrderTitle").innerText = s.orderTitle;
-      document.getElementById("uiClearLabel").innerText = s.clear;
+      document.getElementById("uiClearBtn").innerText = s.clear;
       document.getElementById("cashGivenInput").placeholder = s.cashPlaceholder;
       document.getElementById("uiCloseLabel").innerText = s.close;
       document.getElementById("uiNewItemTitle").innerText = s.newTitle;
@@ -883,59 +845,59 @@
       document.getElementById("uiThanksNote").innerText = s.thanks;
       document.getElementById("uiBtnCloseInvoice").innerText = s.close;
       document.getElementById("uiBtnPrint").innerText = s.print;
+      
+      // Update the print button label keeping the span
+      const payLbl = document.getElementById("uiPayLabel");
+      const sumSpan = document.getElementById("drawerTotalSum").outerHTML;
+      payLbl.innerHTML = `${s.payLabel} (₹${sumSpan})`;
 
-      renderCards(items);
-      renderCartUI();
+      renderGrid(items);
+      updateCartUI();
     }
 
     function getName(item) {
       return (lang === "kn" && item.nameKn) ? item.nameKn : item.nameEn;
     }
-
     function getCat(item) {
       return (lang === "kn" && item.catKn) ? item.catKn : item.catEn;
     }
 
-    function renderCards(list) {
+    function renderGrid(list) {
       const grid = document.getElementById("productGrid");
-      const s = strings[lang];
-
       if (list.length === 0) {
-        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--muted); padding: 30px 10px;">No items found.</p>`;
+        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-soft); padding: 40px 10px;">No items found.</p>`;
         return;
       }
 
       grid.innerHTML = list.map(item => {
-        const inCartQty = cart[item.id] ? cart[item.id].qty : 0;
+        const inCart = cart[item.id] ? cart[item.id].qty : 0;
         return `
-          <div class="touch-card" onclick="modifyQty(${item.id}, 1)">
-            <div class="card-photo-box">
-              <span class="card-cat-pill">${getCat(item)}</span>
+          <div class="card" onclick="modifyQty(${item.id}, 1)">
+            <div class="card-img-wrap">
+              <span class="cat-tag">${getCat(item)}</span>
               ${item.img ? `
-                <img src="${item.img}" alt="${item.nameEn}" class="card-photo" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                <div class="card-fallback-badge" style="display:none; background:${item.color || '#1e3a8a'};">
+                <img src="${item.img}" alt="${item.nameEn}" class="card-img" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <div class="fallback-gradient" style="display:none; background:${item.color || 'linear-gradient(135deg, #4f46e5, #818cf8)'};">
                   ${item.nameEn.charAt(0).toUpperCase()}
                 </div>
               ` : `
-                <div class="card-fallback-badge" style="background:${item.color || '#1e3a8a'};">
+                <div class="fallback-gradient" style="background:${item.color || 'linear-gradient(135deg, #4f46e5, #818cf8)'};">
                   ${item.nameEn.charAt(0).toUpperCase()}
                 </div>
               `}
             </div>
-            <div class="card-name">${getName(item)}</div>
-            <div class="card-price">₹${item.cost}</div>
-
-            <!-- Interactive Stepper -->
-            <div class="card-stepper" onclick="event.stopPropagation();">
-              ${inCartQty === 0 ? `
-                <button class="card-stepper-btn add-only" onclick="modifyQty(${item.id}, 1)">
-                  ${s.addText}
-                </button>
-              ` : `
-                <button class="card-stepper-btn" onclick="modifyQty(${item.id}, -1)">−</button>
-                <span class="card-stepper-count">${inCartQty}</span>
-                <button class="card-stepper-btn" onclick="modifyQty(${item.id}, 1)">+</button>
-              `}
+            <div class="card-title">${getName(item)}</div>
+            <div class="card-bottom">
+              <div class="card-price">₹${item.cost}</div>
+              <div class="btn-stepper ${inCart > 0 ? 'active-step' : ''}" onclick="event.stopPropagation()">
+                ${inCart === 0 ? `
+                  <button class="btn-stepper add" onclick="modifyQty(${item.id}, 1)">+</button>
+                ` : `
+                  <button class="step-icon" onclick="modifyQty(${item.id}, -1)">−</button>
+                  <span class="step-val">${inCart}</span>
+                  <button class="step-icon" onclick="modifyQty(${item.id}, 1)">+</button>
+                `}
+              </div>
             </div>
           </div>
         `;
@@ -950,10 +912,11 @@
         (i.catEn && i.catEn.toLowerCase().includes(q)) ||
         (i.catKn && i.catKn.includes(q))
       );
-      renderCards(filtered);
+      renderGrid(filtered);
     }
 
     function modifyQty(id, delta) {
+      vibrate();
       if (!cart[id]) {
         if (delta > 0) {
           const product = items.find(i => i.id === id);
@@ -963,29 +926,32 @@
         cart[id].qty += delta;
         if (cart[id].qty <= 0) delete cart[id];
       }
-      renderCards(items);
-      renderCartUI();
+      renderGrid(items);
+      updateCartUI();
     }
 
     function clearCart() {
+      vibrate();
       cart = {};
-      const cash = document.getElementById("cashGivenInput");
-      if (cash) cash.value = "";
-      renderCards(items);
-      renderCartUI();
+      document.getElementById("cashGivenInput").value = "";
+      renderGrid(items);
+      updateCartUI();
       closeDrawer();
     }
 
-    function renderCartUI() {
+    function updateCartUI() {
       const listEl = document.getElementById("drawerList");
-      const s = strings[lang];
+      const pill = document.getElementById("floatCart");
+      const s = dict[lang];
       const keys = Object.keys(cart);
       let count = 0;
       let total = 0;
 
       if (keys.length === 0) {
-        listEl.innerHTML = `<div style="text-align: center; color: var(--muted); padding: 40px 10px;">${s.empty}</div>`;
+        listEl.innerHTML = `<div style="text-align: center; color: var(--text-soft); padding: 50px 10px;">🛒<br>${s.empty}</div>`;
+        pill.classList.add("hidden");
       } else {
+        pill.classList.remove("hidden");
         listEl.innerHTML = keys.map(k => {
           const item = cart[k];
           const lineSum = item.qty * item.cost;
@@ -993,32 +959,32 @@
           total += lineSum;
 
           return `
-            <div class="drawer-item-row">
-              <div class="drawer-item-info">
-                <div class="drawer-item-name">${getName(item)}</div>
-                <div class="drawer-item-rate">₹${item.cost}</div>
+            <div class="cart-row">
+              <div class="row-info">
+                <div class="row-name">${getName(item)}</div>
+                <div class="row-rate">₹${item.cost}</div>
               </div>
-              <div class="drawer-stepper">
-                <button class="drawer-step-btn" onclick="modifyQty(${item.id}, -1)">−</button>
-                <span class="drawer-step-qty">${item.qty}</span>
-                <button class="drawer-step-btn" onclick="modifyQty(${item.id}, 1)">+</button>
+              <div class="btn-stepper active-step" style="width: 100px;">
+                <button class="step-icon" onclick="modifyQty(${item.id}, -1)">−</button>
+                <span class="step-val">${item.qty}</span>
+                <button class="step-icon" onclick="modifyQty(${item.id}, 1)">+</button>
               </div>
-              <div class="drawer-item-sum">₹${lineSum}</div>
+              <div class="row-total">₹${lineSum}</div>
             </div>
           `;
         }).join("");
       }
 
-      document.getElementById("barTotal").innerText = `₹${total}`;
-      document.getElementById("barCount").innerText = count;
+      document.getElementById("pillTotal").innerText = `₹${total}`;
+      document.getElementById("pillCount").innerText = count;
       document.getElementById("drawerTotalSum").innerText = total;
       calcChange();
     }
 
-    function quickCash(addAmount) {
+    function quickCash(amt) {
       const input = document.getElementById("cashGivenInput");
-      const current = parseFloat(input.value) || 0;
-      input.value = current + addAmount;
+      const cur = parseFloat(input.value) || 0;
+      input.value = cur + amt;
       calcChange();
     }
 
@@ -1029,36 +995,53 @@
     }
 
     function calcChange() {
-      const s = strings[lang];
+      const s = dict[lang];
       const total = parseFloat(document.getElementById("drawerTotalSum").innerText) || 0;
       const cash = parseFloat(document.getElementById("cashGivenInput").value) || 0;
       const tag = document.getElementById("changeText");
 
       if (cash >= total && total > 0) {
-        tag.innerText = `${s.changePrefix}${(cash - total).toFixed(2)}`;
+        tag.innerText = `${s.changePre}${(cash - total).toFixed(2)}`;
         tag.style.color = "var(--accent)";
       } else if (cash > 0) {
-        tag.innerText = `${s.duePrefix}${(total - cash).toFixed(2)}`;
+        tag.innerText = `${s.duePre}${(total - cash).toFixed(2)}`;
         tag.style.color = "var(--danger)";
       } else {
         tag.innerText = s.changeText;
-        tag.style.color = "var(--muted)";
+        tag.style.color = "var(--text-soft)";
       }
     }
 
+    /* Modals & Bottom Sheet */
     function openDrawer() {
-      document.getElementById("drawerScrim").style.display = "flex";
+      vibrate();
+      const scrim = document.getElementById("drawerScrim");
+      const sheet = document.getElementById("bottomSheet");
+      scrim.style.display = "flex";
+      // tiny delay to trigger CSS transition
+      setTimeout(() => {
+        scrim.classList.add("show");
+        sheet.classList.add("show");
+      }, 10);
     }
 
-    function closeDrawer() {
-      document.getElementById("drawerScrim").style.display = "none";
+    function closeDrawer(e) {
+      if(e && e.target !== document.getElementById("drawerScrim") && e.target.id !== "uiCloseLabel") return;
+      vibrate();
+      const scrim = document.getElementById("drawerScrim");
+      const sheet = document.getElementById("bottomSheet");
+      scrim.classList.remove("show");
+      sheet.classList.remove("show");
+      setTimeout(() => { scrim.style.display = "none"; }, 300); // match transition time
     }
 
     function openAddModal() {
+      vibrate();
       document.getElementById("addItemModal").style.display = "flex";
     }
 
     function closeAddModal() {
+      vibrate();
       document.getElementById("addItemModal").style.display = "none";
       document.getElementById("addNameEn").value = "";
       document.getElementById("addNameKn").value = "";
@@ -1079,24 +1062,25 @@
         return;
       }
 
-      const colors = ["#2563eb", "#16a34a", "#d97706", "#dc2626", "#7c3aed", "#0891b2"];
-      const randColor = colors[Math.floor(Math.random() * colors.length)];
+      const gradients = [
+        "linear-gradient(135deg, #3b82f6, #1d4ed8)",
+        "linear-gradient(135deg, #10b981, #047857)",
+        "linear-gradient(135deg, #f59e0b, #b45309)",
+        "linear-gradient(135deg, #ef4444, #b91c1c)",
+        "linear-gradient(135deg, #8b5cf6, #6d28d9)",
+        "linear-gradient(135deg, #ec4899, #be185d)"
+      ];
+      const randColor = gradients[Math.floor(Math.random() * gradients.length)];
 
       const inject = (imgBase64) => {
         const newItem = {
-          id: Date.now(),
-          nameEn: nameEn,
-          nameKn: nameKn,
-          cost: price,
-          catEn: cat,
-          catKn: cat,
-          img: imgBase64 || "",
-          color: randColor
+          id: Date.now(), nameEn, nameKn, cost: price, catEn: cat, catKn: cat,
+          img: imgBase64 || "", color: randColor
         };
         customItems.unshift(newItem);
-        localStorage.setItem("pos_mobile_custom", JSON.stringify(customItems));
+        localStorage.setItem("pos_pro_custom", JSON.stringify(customItems));
         items.unshift(newItem);
-        renderCards(items);
+        renderGrid(items);
         closeAddModal();
       };
 
@@ -1123,9 +1107,9 @@
         grandTotal += lineTotal;
         return `
           <tr>
-            <td style="padding: 4px 0;">${getName(item)}</td>
-            <td style="text-align: center; padding: 4px 0;">${item.qty}</td>
-            <td style="text-align: right; padding: 4px 0;">₹${lineTotal}</td>
+            <td style="padding: 6px 0; font-weight: 700;">${getName(item)}</td>
+            <td style="text-align: center; padding: 6px 0;">${item.qty}</td>
+            <td style="text-align: right; padding: 6px 0; font-weight: 700;">₹${lineTotal}</td>
           </tr>
         `;
       }).join("");
@@ -1138,18 +1122,19 @@
       document.getElementById("invoicePaidVal").innerText = `₹${paid}`;
       document.getElementById("invoiceChangeVal").innerText = `₹${change}`;
 
-      closeDrawer();
-      document.getElementById("invoiceModal").style.display = "flex";
+      closeDrawer({target: document.getElementById("drawerScrim")});
+      setTimeout(() => { document.getElementById("invoiceModal").style.display = "flex"; }, 300);
     }
 
     function closeInvoiceModal() {
+      vibrate();
       document.getElementById("invoiceModal").style.display = "none";
       clearCart();
     }
 
-    // Initialize App
-    renderCards(items);
-    renderCartUI();
+    // Init App
+    renderGrid(items);
+    updateCartUI();
   </script>
 </body>
 </html>
