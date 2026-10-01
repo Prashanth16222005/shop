@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#ffffff" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <title>Premium POS App</title>
+  <title>Premium POS & Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+Kannada:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -27,218 +27,154 @@
       --border: #e2e8f0;
       --radius-sm: 10px;
       --radius-md: 14px;
-      --radius-lg: 28px;
+      --radius-lg: 20px;
+      --nav-height: 65px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Outfit', 'Noto Sans Kannada', sans-serif;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', 'Noto Sans Kannada', sans-serif; -webkit-tap-highlight-color: transparent; user-select: none; }
+    
+    body { background: var(--bg-color); color: var(--text-main); display: flex; flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden; }
 
-    body {
-      background: var(--bg-color);
-      color: var(--text-main);
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      height: 100dvh;
-      overflow: hidden;
-    }
+    /* App Views */
+    .app-view { display: none; flex-direction: column; height: calc(100vh - var(--nav-height)); overflow: hidden; }
+    .app-view.active { display: flex; }
 
-    /* Glassmorphic Header */
+    /* Header */
     header {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-      padding: 10px 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 40;
+      background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8); padding: 10px 14px;
+      display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 40;
     }
-
     .brand { display: flex; align-items: center; gap: 8px; }
     .brand-icon {
-      background: linear-gradient(135deg, var(--primary), #818cf8); color: #fff;
-      font-weight: 800; width: 34px; height: 34px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
-      box-shadow: 0 4px 12px var(--primary-glow);
+      background: linear-gradient(135deg, var(--primary), #818cf8); color: #fff; font-weight: 800; width: 34px; height: 34px;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; box-shadow: 0 4px 12px var(--primary-glow);
     }
     .brand-title { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.3px; }
+    .lang-toggle { background: #f1f5f9; color: var(--primary); border: none; padding: 6px 10px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; cursor: pointer; }
 
-    .lang-toggle {
-      background: #f1f5f9; color: var(--primary); border: none; padding: 6px 10px;
-      border-radius: 8px; font-weight: 800; font-size: 0.8rem; cursor: pointer;
+    /* POS Workspace */
+    .workspace { flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 90px; -webkit-overflow-scrolling: touch; }
+    
+    /* Category Chips */
+    .category-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 6px; -webkit-overflow-scrolling: touch; }
+    .category-scroll::-webkit-scrollbar { display: none; }
+    .cat-chip {
+      background: var(--surface); border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px;
+      font-weight: 700; font-size: 0.85rem; color: var(--text-soft); white-space: nowrap; cursor: pointer; transition: all 0.2s;
     }
+    .cat-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 10px var(--primary-glow); }
 
-    /* Main Scroll Workspace */
-    .workspace {
-      flex: 1; overflow-y: auto; padding: 12px; padding-bottom: 120px;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .search-row {
-      display: flex; gap: 8px; margin-bottom: 12px; position: sticky; top: 0;
-      z-index: 10; background: var(--bg-color); padding-bottom: 6px;
-    }
-
-    .search-bar {
-      flex: 1; background: var(--surface); border: 1px solid var(--border);
-      padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.9rem;
-      outline: none; box-shadow: 0 2px 10px rgba(0,0,0,0.02); user-select: text;
-    }
+    .search-row { display: flex; gap: 8px; margin-bottom: 12px; }
+    .search-bar { flex: 1; background: var(--surface); border: 1px solid var(--border); padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.9rem; outline: none; user-select: text; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
     .search-bar:focus { border-color: var(--primary); }
 
-    .btn-add-item {
-      background: var(--primary); color: #fff; border: none; padding: 0 14px;
-      border-radius: var(--radius-sm); font-weight: 800; font-size: 0.85rem;
-      display: flex; align-items: center; gap: 4px; box-shadow: 0 4px 15px var(--primary-glow);
-    }
-
-    /* 2 Items in a Row Fixed Grid */
-    .grid {
-      display: grid; 
-      grid-template-columns: repeat(2, 1fr); /* FORCES 2 COLUMNS */
-      gap: 10px;
-    }
-
-    .card {
-      background: var(--surface); border-radius: var(--radius-md); padding: 8px;
-      display: flex; flex-direction: column; position: relative;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid var(--border);
-    }
-
-    /* Highly Visible Edit Button */
-    .edit-pill {
-      position: absolute; top: 4px; right: 4px;
-      background: rgba(255, 255, 255, 0.95); border: 1px solid var(--border);
-      padding: 3px 6px; border-radius: 8px; font-size: 0.7rem; font-weight: 800;
-      color: var(--primary); z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-      display: flex; align-items: center; gap: 3px; cursor: pointer;
-    }
-
-    .card-img-wrap {
-      width: 100%; height: 85px; background: #f8fafc; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center; position: relative;
-      overflow: hidden; margin-bottom: 8px; cursor: pointer;
-    }
-
+    /* 2-Column POS Grid */
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .card { background: var(--surface); border-radius: var(--radius-md); padding: 8px; display: flex; flex-direction: column; position: relative; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid var(--border); }
+    
+    .edit-pill { position: absolute; top: 4px; right: 4px; background: rgba(255, 255, 255, 0.95); border: 1px solid var(--border); padding: 3px 6px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; color: var(--primary); z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.08); display: flex; align-items: center; gap: 3px; cursor: pointer; }
+    
+    .card-img-wrap { width: 100%; height: 85px; background: #f8fafc; border-radius: 8px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-bottom: 8px; }
     .card-img { max-width: 90%; max-height: 90%; object-fit: contain; }
-    .fallback-gradient {
-      width: 100%; height: 100%; display: flex; align-items: center;
-      justify-content: center; color: #fff; font-size: 2rem; font-weight: 800;
-    }
-
-    .cat-tag {
-      position: absolute; top: 4px; left: 4px; background: rgba(255,255,255,0.95);
-      color: var(--text-main); font-size: 0.6rem; padding: 2px 5px;
-      border-radius: 4px; font-weight: 800; z-index: 2;
-    }
-
-    .card-title {
-      font-size: 0.85rem; font-weight: 800; line-height: 1.2; margin-bottom: 6px;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-
-    /* Separate Full & Half Variant Rows */
-    .variant-row {
-      display: flex; justify-content: space-between; align-items: center;
-      background: #f8fafc; padding: 5px 6px; border-radius: 8px; margin-bottom: 5px;
-      border: 1px solid #f1f5f9; cursor: pointer;
-    }
-    .variant-row.half-variant {
-      background: var(--warning-bg); border-color: #fde68a; margin-bottom: 0;
-    }
-
+    .fallback-gradient { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.8rem; font-weight: 800; }
+    
+    .cat-tag { position: absolute; top: 4px; left: 4px; background: rgba(255,255,255,0.95); color: var(--text-main); font-size: 0.6rem; padding: 2px 5px; border-radius: 4px; font-weight: 800; z-index: 2; }
+    
+    .card-title { font-size: 0.85rem; font-weight: 800; line-height: 1.2; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    
+    .variant-row { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 5px; border-radius: 8px; margin-bottom: 5px; border: 1px solid #f1f5f9; cursor: pointer; }
+    .variant-row.half-variant { background: var(--warning-bg); border-color: #fde68a; margin-bottom: 0; }
     .variant-label { display: flex; flex-direction: column; }
-    .v-title { font-size: 0.6rem; font-weight: 700; color: var(--text-soft); text-transform: uppercase; }
-    .v-price { font-size: 1rem; font-weight: 800; color: var(--primary); }
+    .v-title { font-size: 0.58rem; font-weight: 700; color: var(--text-soft); text-transform: uppercase; }
+    .v-price { font-size: 0.95rem; font-weight: 800; color: var(--primary); }
     .half-variant .v-price { color: var(--warning); }
     .half-variant .v-title { color: #b45309; }
-
-    /* Stepper Styling */
-    .btn-stepper {
-      display: flex; align-items: center; justify-content: center;
-      border-radius: 6px; height: 30px; border: none; cursor: pointer;
-    }
-
-    .btn-stepper.add {
-      background: var(--primary); color: #fff; width: 42px; font-size: 0.8rem; font-weight: 800;
-    }
+    
+    .btn-stepper { display: flex; align-items: center; justify-content: center; border-radius: 6px; height: 30px; border: none; cursor: pointer; }
+    .btn-stepper.add { background: var(--primary); color: #fff; width: 42px; font-size: 0.8rem; font-weight: 800; }
     .half-variant .btn-stepper.add { background: var(--warning); }
-
-    .btn-stepper.active-step {
-      width: 82px; justify-content: space-between; padding: 0; background: var(--surface);
-      border: 1px solid var(--primary); box-shadow: 0 2px 8px var(--primary-glow);
-    }
+    .btn-stepper.active-step { width: 82px; justify-content: space-between; padding: 0; background: var(--surface); border: 1px solid var(--primary); box-shadow: 0 2px 8px var(--primary-glow); }
     .half-variant .btn-stepper.active-step { border-color: var(--warning); box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2); }
-
-    .step-icon {
-      width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
-      background: transparent; border: none; font-weight: 800; color: var(--text-main); font-size: 1rem;
-    }
-
-    .step-input {
-      font-weight: 800; font-size: 0.9rem; color: var(--primary);
-      background: transparent; border: none; width: 28px; text-align: center;
-      outline: none; user-select: text; -moz-appearance: textfield; padding: 0;
-    }
+    
+    .step-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; font-weight: 800; font-size: 1rem; color: var(--text-main); }
+    .step-input { font-weight: 800; font-size: 0.9rem; color: var(--primary); background: transparent; border: none; width: 28px; text-align: center; outline: none; user-select: text; -moz-appearance: textfield; padding: 0; }
     .half-variant .step-input { color: var(--warning); }
     .step-input::-webkit-outer-spin-button, .step-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
+    /* Admin Workspace */
+    .admin-workspace { flex: 1; overflow-y: auto; padding: 14px; background: #f8fafc; }
+    .admin-tabs { display: flex; background: #e2e8f0; border-radius: 12px; padding: 4px; margin-bottom: 16px; }
+    .admin-tab { flex: 1; text-align: center; padding: 10px; font-size: 0.9rem; font-weight: 800; color: var(--text-soft); border-radius: 10px; cursor: pointer; }
+    .admin-tab.active { background: var(--surface); color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+
+    .admin-section { display: none; }
+    .admin-section.active { display: block; }
+
+    .btn-add-item { background: var(--primary); color: #fff; border: none; padding: 12px; width: 100%; border-radius: var(--radius-sm); font-weight: 800; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 15px var(--primary-glow); margin-bottom: 16px; }
+
+    /* Inventory List */
+    .inv-list-item { background: var(--surface); padding: 12px; border-radius: 12px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .inv-name { font-size: 0.95rem; font-weight: 800; margin-bottom: 2px;}
+    .inv-cat { font-size: 0.7rem; color: var(--primary); font-weight: 700; background: var(--primary-glow); padding: 2px 6px; border-radius: 4px; display: inline-block; }
+    .inv-price { font-size: 1rem; font-weight: 800; text-align: right; }
+    .inv-half { font-size: 0.75rem; color: var(--warning); font-weight: 700; }
+    .inv-actions { display: flex; justify-content: flex-end; margin-top: 6px;}
+    .btn-edit-inv { background: #f1f5f9; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 800; color: var(--primary); cursor: pointer;}
+
+    /* Expenses Section */
+    .expense-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .exp-card { background: var(--surface); padding: 14px; border-radius: 16px; border: 1px solid var(--border); }
+    .exp-card h4 { font-size: 0.8rem; color: var(--text-soft); font-weight: 700; margin-bottom: 4px; }
+    .exp-card .val { font-size: 1.4rem; font-weight: 800; color: var(--danger); }
+    
+    .expense-form { background: var(--surface); padding: 16px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 16px; }
+    .expense-form h3 { font-size: 1rem; font-weight: 800; margin-bottom: 12px; }
+    .exp-row { display: flex; gap: 8px; margin-bottom: 10px; }
+    .exp-input { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none; background: #f8fafc; user-select: text;}
+    .btn-add-exp { width: 100%; background: var(--primary); color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 800; font-size: 0.95rem; }
+
+    .exp-list-title { font-size: 0.9rem; font-weight: 800; margin-bottom: 10px; color: var(--text-soft); text-transform: uppercase; }
+    .exp-item { background: var(--surface); padding: 12px; border-radius: 12px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .exp-desc { font-size: 0.9rem; font-weight: 700; }
+    .exp-date { font-size: 0.7rem; color: var(--text-soft); }
+    .exp-amt { font-size: 1rem; font-weight: 800; color: var(--danger); }
+    .del-exp { color: var(--danger); background: rgba(244, 63, 94, 0.1); border: none; font-size: 1rem; padding: 4px 8px; border-radius: 6px; font-weight: 800;}
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-height);
+      background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 50;
+    }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-soft); font-weight: 700; font-size: 0.75rem; width: 50%; cursor: pointer;}
+    .nav-item.active { color: var(--primary); }
+    .nav-icon { font-size: 1.4rem; }
+
     /* Floating Pill Cart */
     .floating-cart {
-      position: fixed; bottom: 20px; left: 5%; width: 90%;
-      background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(16px);
-      padding: 12px 16px; border-radius: var(--radius-lg); display: flex;
-      justify-content: space-between; align-items: center; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-      z-index: 50; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: fixed; bottom: calc(var(--nav-height) + 15px); left: 5%; width: 90%; background: rgba(15, 23, 42, 0.98); padding: 12px 16px; border-radius: var(--radius-lg); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); z-index: 45; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .floating-cart.hidden { transform: translateY(150px); }
-
     .cart-info { display: flex; flex-direction: column; color: #fff; }
     .cart-price { font-size: 1.2rem; font-weight: 800; color: #34d399; }
     .cart-count { font-size: 0.75rem; font-weight: 600; color: #94a3b8; }
+    .btn-checkout-pill { background: #fff; color: var(--text-main); border: none; padding: 8px 16px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
 
-    .btn-checkout-pill {
-      background: #fff; color: var(--text-main); border: none; padding: 8px 16px;
-      border-radius: 20px; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;
-    }
-
-    /* Bottom Sheet Drawer */
-    .scrim {
-      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
-      display: none; align-items: flex-end; z-index: 100; opacity: 0; transition: opacity 0.2s ease;
-    }
+    /* Bottom Sheet Cart Drawer */
+    .scrim { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); display: none; align-items: flex-end; z-index: 100; opacity: 0; transition: opacity 0.2s ease; }
     .scrim.show { opacity: 1; }
-
-    .bottom-sheet {
-      background: var(--bg-color); width: 100%; max-height: 85vh; border-radius: 28px 28px 0 0;
-      display: flex; flex-direction: column; transform: translateY(100%);
-      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
-    }
+    .bottom-sheet { background: var(--bg-color); width: 100%; max-height: 85vh; border-radius: 28px 28px 0 0; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 -10px 40px rgba(0,0,0,0.15); }
     .bottom-sheet.show { transform: translateY(0); }
-
     .sheet-handle { width: 40px; height: 5px; background: #cbd5e1; border-radius: 5px; margin: 12px auto; }
-    .sheet-header { padding: 0 16px 12px; display: flex; justify-content: space-between; align-items: center; }
+    .sheet-header { padding: 0 16px 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border);}
     .sheet-title { font-size: 1.1rem; font-weight: 800; }
     .btn-clear { background: rgba(244, 63, 94, 0.1); color: var(--danger); border: none; padding: 6px 12px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; }
 
-    .sheet-body { flex: 1; overflow-y: auto; padding: 0 16px 16px; display: flex; flex-direction: column; gap: 10px; }
-
-    .cart-row {
-      background: var(--surface); padding: 10px; border-radius: 14px; display: flex; justify-content: space-between;
-      align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-    }
+    .sheet-body { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .cart-row { background: var(--surface); padding: 10px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
     .row-info { max-width: 100px; }
-    .row-name { font-weight: 800; font-size: 0.9rem; margin-bottom: 2px; }
+    .row-name { font-weight: 800; font-size: 0.9rem; }
     .row-rate { font-size: 0.75rem; color: var(--text-soft); font-weight: 700; }
     .row-total { font-size: 1.05rem; font-weight: 800; min-width: 50px; text-align: right; }
 
@@ -246,43 +182,29 @@
     .quick-cash { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; -webkit-overflow-scrolling: touch; }
     .quick-cash::-webkit-scrollbar { display: none; }
     .cash-pill { background: #f8fafc; border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; white-space: nowrap; }
-    .cash-pill:active { background: var(--primary); color: #fff; }
-
     .calc-row { display: flex; gap: 12px; margin-bottom: 14px; align-items: center; }
     .input-glass { flex: 1; background: #f8fafc; border: 1px solid var(--border); padding: 12px 14px; border-radius: 12px; font-size: 1rem; font-weight: 800; outline: none; user-select: text; }
     .change-label { font-size: 0.9rem; font-weight: 800; color: var(--accent); min-width: 90px; text-align: right; }
 
     .sheet-btns { display: flex; gap: 10px; }
-    .btn-close-sheet { background: #f1f5f9; color: var(--text-main); border: none; padding: 14px; border-radius: 14px; font-weight: 800; font-size: 0.95rem; width: 30%; }
+    .btn-close-sheet { background: #f1f5f9; border: none; padding: 14px; border-radius: 14px; font-weight: 800; font-size: 0.95rem; width: 30%; }
     .btn-pay { flex: 1; background: linear-gradient(135deg, var(--accent), #059669); color: #fff; border: none; padding: 14px; border-radius: 14px; font-weight: 800; font-size: 1rem; box-shadow: 0 8px 20px var(--accent-glow); }
 
     /* Modals - SCROLLABLE */
-    .center-modal {
-      position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px);
-      display: none; align-items: flex-start; justify-content: center; z-index: 120; 
-      padding: 40px 16px; overflow-y: auto; -webkit-overflow-scrolling: touch;
-    }
-    
-    .dialog-box {
-      background: var(--surface); width: 100%; max-width: 360px; border-radius: 20px;
-      padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); margin: auto; position: relative;
-    }
-
+    .center-modal { position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); display: none; align-items: flex-start; justify-content: center; z-index: 120; padding: 40px 16px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .dialog-box { background: var(--surface); width: 100%; max-width: 360px; border-radius: 20px; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); margin: auto; }
     .form-group { margin-bottom: 12px; }
     .form-group label { font-size: 0.8rem; font-weight: 800; margin-bottom: 4px; display: block; color: var(--text-main); }
-    .form-input {
-      width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border);
-      background: #f8fafc; font-size: 0.95rem; font-weight: 600; outline: none; user-select: text;
-    }
+    .form-input { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); background: #f8fafc; font-size: 0.95rem; font-weight: 600; outline: none; user-select: text; }
     .form-input:focus { border-color: var(--primary); background: #fff; }
-
+    
     /* Receipt Print Layout */
     .receipt-print { text-align: center; }
     .receipt-table { width: 100%; font-size: 0.85rem; text-align: left; margin: 15px 0; border-collapse: collapse; }
     .receipt-table th { border-bottom: 2px solid var(--border); padding-bottom: 6px; font-weight: 800;}
     .receipt-table td { padding: 8px 0; border-bottom: 1px dashed var(--border); font-weight: 700; }
     .receipt-table tr:last-child td { border-bottom: none; }
-
+    
     @media print {
       body * { visibility: hidden; }
       .dialog-box.printable, .dialog-box.printable * { visibility: visible; }
@@ -301,36 +223,107 @@
     <button class="lang-toggle" onclick="toggleLanguage()" id="langToggleBtn">ಕನ್ನಡ</button>
   </header>
 
-  <main class="workspace">
-    <div class="search-row">
-      <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Search name or number..." oninput="handleSearch()" />
-      <button class="btn-add-item" onclick="openAddEditModal()">
-        <span>➕</span> <span id="uiAddTxt">Add</span>
-      </button>
-    </div>
-    <div class="grid" id="productGrid"></div>
-  </main>
+  <!-- POS VIEW -->
+  <div id="viewPos" class="app-view active">
+    <main class="workspace">
+      <!-- Category Chips -->
+      <div class="category-scroll" id="catFilters">
+        <div class="cat-chip active" onclick="filterCat('All')">All</div>
+        <div class="cat-chip" onclick="filterCat('Tobacco')">Tobacco</div>
+        <div class="cat-chip" onclick="filterCat('Cigarette')">Cigarette</div>
+        <div class="cat-chip" onclick="filterCat('Paan Masala')">Pan Masala</div>
+        <div class="cat-chip" onclick="filterCat('Beedi')">Beedi</div>
+        <div class="cat-chip" onclick="filterCat('Pouch')">Pouch</div>
+        <div class="cat-chip" onclick="filterCat('General')">Soaps / General</div>
+        <div class="cat-chip" onclick="filterCat('Biscuit')">Biscuits</div>
+        <div class="cat-chip" onclick="filterCat('Oil')">Oil / Tin</div>
+      </div>
 
-  <div class="floating-cart hidden" id="floatCart" onclick="openDrawer()">
-    <div class="cart-info">
-      <div class="cart-price" id="pillTotal">₹0</div>
-      <div class="cart-count"><span id="pillCount">0</span> <span id="uiPillItems">items</span></div>
+      <div class="search-row">
+        <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Search name or number..." oninput="handleSearch()" />
+      </div>
+      
+      <!-- 2-COLUMN GRID -->
+      <div class="grid" id="productGrid"></div>
+    </main>
+
+    <div class="floating-cart hidden" id="floatCart" onclick="openDrawer()">
+      <div class="cart-info">
+        <div class="cart-price" id="pillTotal">₹0</div>
+        <div class="cart-count"><span id="pillCount">0</span> <span id="uiPillItems">items</span></div>
+      </div>
+      <button class="btn-checkout-pill"><span id="uiViewBill">View Bill</span> 🛒</button>
     </div>
-    <button class="btn-checkout-pill">
-      <span id="uiViewBill">View Bill</span> 🛒
-    </button>
   </div>
 
+  <!-- ADMIN VIEW -->
+  <div id="viewAdmin" class="app-view">
+    <div class="admin-workspace">
+      <h2 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 16px;" id="uiAdminTitle">Admin Portal</h2>
+      
+      <div class="admin-tabs">
+        <div class="admin-tab active" id="tabItemsBtn" onclick="switchAdminTab('items')">Inventory Items</div>
+        <div class="admin-tab" id="tabExpBtn" onclick="switchAdminTab('expenses')">Expenses</div>
+      </div>
+
+      <!-- Inventory Section -->
+      <div id="adminItems" class="admin-section active">
+        <button class="btn-add-item" style="width: 100%; padding: 12px; justify-content: center; font-size: 1rem; margin-bottom: 16px;" onclick="openAddEditModal()">
+          ➕ <span id="uiAddNewTxt">Add New Item</span>
+        </button>
+        <div id="inventoryList"></div>
+      </div>
+
+      <!-- Expenses Section -->
+      <div id="adminExp" class="admin-section">
+        <div class="expense-cards">
+          <div class="exp-card">
+            <h4 id="uiDailyExp">Daily Expenses</h4>
+            <div class="val" id="dailyTotal">₹0</div>
+          </div>
+          <div class="exp-card">
+            <h4 id="uiMonthlyExp">Monthly Expenses</h4>
+            <div class="val" id="monthlyTotal">₹0</div>
+          </div>
+        </div>
+
+        <div class="expense-form">
+          <h3 id="uiAddExpTitle">Add Expense</h3>
+          <input type="text" id="expDesc" class="exp-input" placeholder="Description (e.g. Tea, Stock)" style="margin-bottom: 8px; width: 100%;" />
+          <div class="exp-row">
+            <input type="number" inputmode="numeric" id="expAmt" class="exp-input" placeholder="Amount (₹)" />
+            <input type="date" id="expDate" class="exp-input" />
+          </div>
+          <button class="btn-add-exp" onclick="addExpense()" id="uiSaveExpBtn">Save Expense</button>
+        </div>
+
+        <div class="exp-list-title" id="uiRecentExp">Recent Expenses</div>
+        <div id="expenseList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAVIGATION -->
+  <nav class="bottom-nav">
+    <div class="nav-item active" id="navPos" onclick="switchAppView('pos')">
+      <div class="nav-icon">🛒</div>
+      <span id="uiNavPos">Billing</span>
+    </div>
+    <div class="nav-item" id="navAdmin" onclick="switchAppView('admin')">
+      <div class="nav-icon">⚙️</div>
+      <span id="uiNavAdmin">Admin</span>
+    </div>
+  </nav>
+
+  <!-- Checkout Drawer -->
   <div class="scrim" id="drawerScrim" onclick="closeDrawer(event)">
     <div class="bottom-sheet" id="bottomSheet" onclick="event.stopPropagation()">
       <div class="sheet-handle"></div>
       <div class="sheet-header">
-        <h3 class="sheet-title" id="uiOrderTitle">Current Order</h3>
+        <h3 style="font-size: 1.1rem; font-weight: 800;" id="uiOrderTitle">Current Order</h3>
         <button class="btn-clear" onclick="clearCart()" id="uiClearBtn">Clear All</button>
       </div>
-
       <div class="sheet-body" id="drawerList"></div>
-
       <div class="sheet-footer">
         <div class="quick-cash">
           <button class="cash-pill" onclick="vibrate(); quickCash(10)">+₹10</button>
@@ -339,12 +332,10 @@
           <button class="cash-pill" onclick="vibrate(); quickCash(500)">+₹500</button>
           <button class="cash-pill" style="background:var(--primary); color:#fff; border:none;" onclick="vibrate(); exactCash()">Exact</button>
         </div>
-
         <div class="calc-row">
-          <input type="number" inputmode="numeric" pattern="[0-9]*" id="cashGivenInput" class="input-glass" placeholder="Cash Given (₹)" oninput="calcChange()" />
-          <div class="change-label" id="changeText">Change: ₹0</div>
+          <input type="number" inputmode="numeric" id="cashGivenInput" class="input-glass" placeholder="Cash Given (₹)" oninput="calcChange()" />
+          <div style="font-size: 0.95rem; font-weight: 800; color: var(--accent); min-width: 90px; text-align: right;" id="changeText">Change: ₹0</div>
         </div>
-
         <div class="sheet-btns">
           <button class="btn-close-sheet" onclick="closeDrawer()" id="uiCloseLabel">Close</button>
           <button class="btn-pay" onclick="vibrate(); generateBill()" id="uiPayLabel">Print (₹<span id="drawerTotalSum">0</span>)</button>
@@ -353,74 +344,43 @@
     </div>
   </div>
 
-  <!-- Editor Modal (Scrollable) -->
+  <!-- Item Editor Modal -->
   <div class="center-modal" id="addItemModal">
     <div class="dialog-box">
-      <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 16px;" id="uiNewItemTitle">Add / Edit Product</h3>
+      <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 20px;" id="uiNewItemTitle">Add / Edit Product</h3>
       <input type="hidden" id="editItemId" />
-      
-      <div class="form-group">
-        <label id="uiLblEn">Item Name (English) *</label>
-        <input type="text" id="addNameEn" class="form-input" placeholder="e.g. Shikhar" required />
-      </div>
-      <div class="form-group">
-        <label id="uiLblKn">Item Name (ಕನ್ನಡ)</label>
-        <input type="text" id="addNameKn" class="form-input" placeholder="ಉದಾ: ಶಿಖರ್" />
-      </div>
-      <div class="form-group">
-        <label id="uiLblCost">Full Price / ಪೂರ್ಣ ಬೆಲೆ (₹) *</label>
-        <input type="number" inputmode="numeric" pattern="[0-9]*" id="addPrice" class="form-input" placeholder="e.g. 50" required />
-      </div>
-      <div class="form-group">
-        <label id="uiLblHalfCost">Half Price / ಅರ್ಧ ಬೆಲೆ (Optional)</label>
-        <input type="number" inputmode="numeric" pattern="[0-9]*" id="addHalfPrice" class="form-input" placeholder="e.g. 25 (Leave blank if none)" />
-      </div>
-      <div class="form-group">
-        <label id="uiLblCat">Category</label>
-        <input type="text" id="addCat" class="form-input" placeholder="e.g. Tobacco, Biscuit" />
-      </div>
-      <div class="sheet-btns" style="margin-top: 20px;">
+      <div class="form-group"><label id="uiLblEn">Item Name (English) *</label><input type="text" id="addNameEn" class="form-input" required /></div>
+      <div class="form-group"><label id="uiLblKn">Item Name (ಕನ್ನಡ)</label><input type="text" id="addNameKn" class="form-input" /></div>
+      <div class="form-group"><label id="uiLblCost">Full Price (₹) *</label><input type="number" inputmode="numeric" id="addPrice" class="form-input" required /></div>
+      <div class="form-group"><label id="uiLblHalfCost">Half Price (Optional)</label><input type="number" inputmode="numeric" id="addHalfPrice" class="form-input" /></div>
+      <div class="form-group"><label id="uiLblCat">Category</label><input type="text" id="addCat" class="form-input" placeholder="e.g. Tobacco, Biscuit, Oil" /></div>
+      <div class="sheet-btns" style="margin-top: 24px;">
         <button class="btn-close-sheet" onclick="closeAddModal()" id="uiBtnCancel">Cancel</button>
         <button class="btn-pay" onclick="vibrate(); saveCustomItem()" id="uiBtnSave">Save Item</button>
       </div>
     </div>
   </div>
 
-  <!-- Receipt Modal (Scrollable) -->
+  <!-- Receipt Print Modal -->
   <div class="center-modal" id="invoiceModal">
     <div class="dialog-box printable receipt-print">
-      <h3 style="font-size: 1.2rem; font-weight: 800;" id="uiShopHeader">RETAIL STORE</h3>
-      <p style="font-size: 0.75rem; color: var(--text-soft);" id="uiInvoiceMemo">Tax Invoice / Cash Memo</p>
+      <h3 style="font-size: 1.3rem; font-weight: 800;" id="uiShopHeader">RETAIL STORE</h3>
+      <p style="font-size: 0.8rem; color: var(--text-soft);" id="uiInvoiceMemo">Tax Invoice / Cash Memo</p>
       <p style="font-size: 0.7rem; color: var(--text-soft); margin-bottom: 12px; border-bottom: 1px dashed var(--border); padding-bottom: 10px;" id="invoiceTimeDisplay"></p>
-
+      
       <table class="receipt-table">
-        <thead>
-          <tr>
-            <th id="uiThItem">Item</th>
-            <th style="text-align: center;" id="uiThQty">Qty</th>
-            <th style="text-align: right;" id="uiThPrice">Total</th>
-          </tr>
-        </thead>
+        <thead><tr><th id="uiThItem">Item</th><th style="text-align: center;" id="uiThQty">Qty</th><th style="text-align: right;" id="uiThPrice">Total</th></tr></thead>
         <tbody id="invoiceTableBody"></tbody>
       </table>
-
+      
       <div style="border-top: 2px dashed var(--border); padding-top: 12px; font-size: 0.9rem;">
-        <div style="display:flex; justify-content:space-between; font-weight:800; margin-bottom:6px; font-size: 1.05rem;">
-          <span id="uiNetLabel">Payable:</span>
-          <span id="invoiceTotalVal">₹0</span>
-        </div>
-        <div style="display:flex; justify-content:space-between; color:var(--text-soft); margin-bottom:4px; font-weight: 700;">
-          <span id="uiPaidLabel">Cash Paid:</span>
-          <span id="invoicePaidVal">₹0</span>
-        </div>
-        <div style="display:flex; justify-content:space-between; color:var(--text-soft); font-weight: 700;">
-          <span id="uiChangeLabel">Change Returned:</span>
-          <span id="invoiceChangeVal">₹0</span>
-        </div>
+        <div style="display:flex; justify-content:space-between; font-weight:800; margin-bottom:6px; font-size: 1.05rem;"><span id="uiNetLabel">Payable:</span><span id="invoiceTotalVal">₹0</span></div>
+        <div style="display:flex; justify-content:space-between; color:var(--text-soft); margin-bottom:4px; font-weight: 700;"><span id="uiPaidLabel">Cash Paid:</span><span id="invoicePaidVal">₹0</span></div>
+        <div style="display:flex; justify-content:space-between; color:var(--text-soft); font-weight: 700;"><span id="uiChangeLabel">Change Returned:</span><span id="invoiceChangeVal">₹0</span></div>
       </div>
       <p style="font-size: 0.85rem; font-weight: 800; color: var(--accent); margin-top: 20px;" id="uiThanksNote">Thank you! Visit again.</p>
-
-      <div class="sheet-btns" style="margin-top: 20px;">
+      
+      <div class="sheet-btns" style="margin-top: 24px;">
         <button class="btn-close-sheet" onclick="closeInvoiceModal()" id="uiBtnCloseInvoice">Close</button>
         <button class="btn-pay" onclick="vibrate(); window.print()" id="uiBtnPrint">🖨️ Print Bill</button>
       </div>
@@ -429,17 +389,18 @@
 
   <script>
     function vibrate() { if (navigator.vibrate) navigator.vibrate(40); }
+    document.getElementById('expDate').valueAsDate = new Date();
 
     const dict = {
       en: {
-        app: "Shop POS", search: "🔍 Search name or number...", toggle: "ಕನ್ನಡ", addTxt: "Add", pillItems: "items", viewBill: "View Bill", orderTitle: "Current Order", clear: "Clear All", empty: "Cart is empty.<br>Tap items to add.", cashPlaceholder: "Cash Given (₹)", changeText: "Change: ₹0", changePre: "Change: ₹", duePre: "Due: ₹", close: "Close", payLabel: "Print", newTitle: "Add / Edit Product", lblEn: "Item Name (English) *", lblKn: "Item Name (ಕನ್ನಡ)", lblCost: "Full Price (₹) *", lblHalf: "Half Price (Optional)", lblCat: "Category", cancel: "Cancel", save: "Save Item", shopHeader: "RETAIL STORE", invoiceMemo: "Tax Invoice / Cash Memo", thItem: "Item", thQty: "Qty", thPrice: "Total", net: "Payable:", paid: "Cash Paid:", change: "Change Returned:", thanks: "Thank you! Visit again.", print: "🖨️ Print Bill", editTxt: "Edit"
+        app: "Shop POS", search: "🔍 Search name or number...", toggle: "ಕನ್ನಡ", addTxt: "Add", pillItems: "items", viewBill: "View Bill", orderTitle: "Current Order", clear: "Clear All", empty: "Cart is empty.<br>Tap items to add.", changePre: "Change: ₹", duePre: "Due: ₹", close: "Close", payLabel: "Print", newTitle: "Add / Edit Product", lblEn: "Item Name (English) *", lblKn: "Item Name (ಕನ್ನಡ)", lblCost: "Full Price (₹) *", lblHalf: "Half Price (Optional)", lblCat: "Category", cancel: "Cancel", save: "Save Item", shopHeader: "RETAIL STORE", invoiceMemo: "Tax Invoice / Cash Memo", thItem: "Item", thQty: "Qty", thPrice: "Total", net: "Payable:", paid: "Cash Paid:", change: "Change Returned:", thanks: "Thank you! Visit again.", print: "🖨️ Print Bill", editTxt: "Edit", navPos: "Billing", navAdmin: "Admin Portal", adminTitle: "Admin Portal", tabItems: "Inventory", tabExp: "Expenses", addNewBtn: "Add New Item", dailyExp: "Daily Expenses", monthlyExp: "Monthly Expenses", addExpTitle: "Add Expense", saveExpBtn: "Save Expense", recentExp: "Recent Expenses"
       },
       kn: {
-        app: "ಅಂಗಡಿ POS", search: "🔍 ಹೆಸರು ಅಥವಾ ನಂಬರ್ ಹುಡುಕಿ...", toggle: "EN", addTxt: "ಸೇರಿಸಿ", pillItems: "ಐಟಂಗಳು", viewBill: "ಬಿಲ್ ನೋಡಿ", orderTitle: "ಪ್ರಸ್ತುತ ಆರ್ಡರ್", clear: "ಎಲ್ಲಾ ಅಳಿಸು", empty: "ಯಾವುದೇ ಐಟಂ ಇಲ್ಲ.<br>ಸೇರಿಸಲು ಐಟಂ ಒತ್ತಿ.", cashPlaceholder: "ನೀಡಿದ ಹಣ (₹)", changeText: "ಬಾಕಿ: ₹0", changePre: "ಬಾಕಿ: ₹", duePre: "ಉಳಿಕೆ: ₹", close: "ಮುಚ್ಚು", payLabel: "ಪ್ರಿಂಟ್", newTitle: "ಐಟಂ ಎಡಿಟ್ / ಸೇರಿಸಿ", lblEn: "ಹೆಸರು (ಇಂಗ್ಲಿಷ್) *", lblKn: "ಹೆಸರು (ಕನ್ನಡ)", lblCost: "ಪೂರ್ಣ ಬೆಲೆ (₹) *", lblHalf: "ಅರ್ಧ ಬೆಲೆ (Optional)", lblCat: "ವಿಭಾಗ", cancel: "ರದ್ದು", save: "ಉಳಿಸಿ", shopHeader: "ಶ್ರೀ ಚಿಲ್ಲರೆ ವ್ಯಾಪಾರ ಮಳಿಗೆ", invoiceMemo: "ಖರೀದಿ ರಶೀದಿ / ಕ್ಯಾಶ್ ಮೆಮೊ", thItem: "ಐಟಂ", thQty: "ಪ್ರಮಾಣ", thPrice: "ಮೊತ್ತ", net: "ಒಟ್ಟು ಪಾವತಿ:", paid: "ಸ್ವೀಕರಿಸಿದ ನಗದು:", change: "ಮರಳಿಸಿದ ಬಾಕಿ:", thanks: "ಧನ್ಯವಾದಗಳು! ಮತ್ತೆ ಬನ್ನಿ.", print: "🖨️ ಬಿಲ್ ಪ್ರಿಂಟ್", editTxt: "ಎಡಿಟ್"
+        app: "ಅಂಗಡಿ POS", search: "🔍 ಹೆಸರು ಅಥವಾ ನಂಬರ್ ಹುಡುಕಿ...", toggle: "EN", addTxt: "ಸೇರಿಸಿ", pillItems: "ಐಟಂಗಳು", viewBill: "ಬಿಲ್ ನೋಡಿ", orderTitle: "ಪ್ರಸ್ತುತ ಆರ್ಡರ್", clear: "ಎಲ್ಲಾ ಅಳಿಸು", empty: "ಯಾವುದೇ ಐಟಂ ಇಲ್ಲ.<br>ಸೇರಿಸಲು ಐಟಂ ಒತ್ತಿ.", changePre: "ಬಾಕಿ: ₹", duePre: "ಉಳಿಕೆ: ₹", close: "ಮುಚ್ಚು", payLabel: "ಪ್ರಿಂಟ್", newTitle: "ಐಟಂ ಎಡಿಟ್ / ಸೇರಿಸಿ", lblEn: "ಹೆಸರು (ಇಂಗ್ಲಿಷ್) *", lblKn: "ಹೆಸರು (ಕನ್ನಡ)", lblCost: "ಪೂರ್ಣ ಬೆಲೆ (₹) *", lblHalf: "ಅರ್ಧ ಬೆಲೆ (Optional)", lblCat: "ವಿಭಾಗ", cancel: "ರದ್ದು", save: "ಉಳಿಸಿ", shopHeader: "ಶ್ರೀ ಚಿಲ್ಲರೆ ವ್ಯಾಪಾರ ಮಳಿಗೆ", invoiceMemo: "ಖರೀದಿ ರಶೀದಿ / ಕ್ಯಾಶ್ ಮೆಮೊ", thItem: "ಐಟಂ", thQty: "ಪ್ರಮಾಣ", thPrice: "ಮೊತ್ತ", net: "ಒಟ್ಟು ಪಾವತಿ:", paid: "ಸ್ವೀಕರಿಸಿದ ನಗದು:", change: "ಮರಳಿಸಿದ ಬಾಕಿ:", thanks: "ಧನ್ಯವಾದಗಳು! ಮತ್ತೆ ಬನ್ನಿ.", print: "🖨️ ಬಿಲ್ ಪ್ರಿಂಟ್", editTxt: "ಎಡಿಟ್", navPos: "ಬಿಲ್ಲಿಂಗ್", navAdmin: "ಅಡ್ಮಿನ್", adminTitle: "ಅಡ್ಮಿನ್ ಪೋರ್ಟಲ್", tabItems: "ವಸ್ತುಗಳ ಪಟ್ಟಿ", tabExp: "ಖರ್ಚುಗಳು", addNewBtn: "ಹೊಸ ಐಟಂ ಸೇರಿಸಿ", dailyExp: "ಇಂದಿನ ಖರ್ಚು", monthlyExp: "ತಿಂಗಳ ಖರ್ಚು", addExpTitle: "ಖರ್ಚು ಸೇರಿಸಿ", saveExpBtn: "ಉಳಿಸಿ", recentExp: "ಇತ್ತೀಚಿನ ಖರ್ಚುಗಳು"
       }
     };
 
-    // Full 39 Items Database extracted from your Excel sheets
+    // Full 39 Items Preloaded
     const masterStock = [
       { id: 101, nameEn: "Ganesh", nameKn: "ಗಣೇಶ್ ಬೀಡಿ", cost: 480, halfCost: 240, catEn: "Beedi", catKn: "ಬೀಡಿ", color: "linear-gradient(135deg, #ea580c, #9a3412)" },
       { id: 102, nameEn: "9 No", nameKn: "೯ ನಂ ಬೀಡಿ", cost: 410, halfCost: 205, catEn: "Beedi", catKn: "ಬೀಡಿ", color: "linear-gradient(135deg, #c2410c, #7c2d12)" },
@@ -479,13 +440,53 @@
       { id: 136, nameEn: "Tiger", nameKn: "ಟೈಗರ್", cost: 108, catEn: "Biscuit", catKn: "ಬಿಸ್ಕತ್ತು", color: "linear-gradient(135deg, #b45309, #451a03)" },
       { id: 137, nameEn: "786", nameKn: "೭೮೬", cost: 320, catEn: "Beedi", catKn: "ಬೀಡಿ", color: "linear-gradient(135deg, #991b1b, #7f1d1d)" },
       { id: 138, nameEn: "Kashaish (2)", nameKn: "ಕಶಿಶ್ (೨)", cost: 50, catEn: "Pouch", catKn: "ಪೌಚ್", color: "linear-gradient(135deg, #c026d3, #a21caf)" },
-      { id: 139, nameEn: "Kashaish (1)", nameKn: "ಕಶಿಶ್ (೧)", cost: 50, catEn: "Pouch", catKn: "ಪೌಚ್", color: "linear-gradient(135deg, #e879f9, #d946ef)" }
+      { id: 139, nameEn: "Kashaish (1)", nameKn: "ಕಶಿಶ್ (೧)", cost: 50, catEn: "Pouch", catKn: "ಪೌಚ್", color: "linear-gradient(135deg, #e879f9, #d946ef)" },
+      { id: 140, nameEn: "Freedom Oil (1L)", nameKn: "ಫ್ರೀಡಮ್ ಎಣ್ಣೆ", cost: 130, catEn: "Oil", catKn: "ಎಣ್ಣೆ", color: "linear-gradient(135deg, #f59e0b, #d97706)" }
     ];
 
-    let items = JSON.parse(localStorage.getItem("pos_inv_final_v4")) || masterStock;
+    let items = JSON.parse(localStorage.getItem("pos_inv_final_v_megaprompt")) || masterStock;
+    let expenses = JSON.parse(localStorage.getItem("pos_expenses_v1")) || [];
+    
     let cart = {};
     let lang = "en";
+    let activeCategory = "All";
 
+    // CORE APP LOGIC
+    function switchAppView(view) {
+      vibrate();
+      document.getElementById('viewPos').classList.remove('active');
+      document.getElementById('viewAdmin').classList.remove('active');
+      document.getElementById('navPos').classList.remove('active');
+      document.getElementById('navAdmin').classList.remove('active');
+      
+      if(view === 'pos') {
+        document.getElementById('viewPos').classList.add('active');
+        document.getElementById('navPos').classList.add('active');
+      } else {
+        document.getElementById('viewAdmin').classList.add('active');
+        document.getElementById('navAdmin').classList.add('active');
+        renderAdminInventory();
+        renderExpenses();
+      }
+    }
+
+    function switchAdminTab(tab) {
+      vibrate();
+      document.getElementById('tabItemsBtn').classList.remove('active');
+      document.getElementById('tabExpBtn').classList.remove('active');
+      document.getElementById('adminItems').classList.remove('active');
+      document.getElementById('adminExp').classList.remove('active');
+
+      if(tab === 'items') {
+        document.getElementById('tabItemsBtn').classList.add('active');
+        document.getElementById('adminItems').classList.add('active');
+      } else {
+        document.getElementById('tabExpBtn').classList.add('active');
+        document.getElementById('adminExp').classList.add('active');
+      }
+    }
+
+    // TRANSLATION
     function toggleLanguage() {
       vibrate();
       lang = lang === "en" ? "kn" : "en";
@@ -494,7 +495,6 @@
       document.getElementById("langToggleBtn").innerText = s.toggle;
       document.getElementById("uiAppName").innerText = s.app;
       document.getElementById("searchInput").placeholder = s.search;
-      document.getElementById("uiAddTxt").innerText = s.addTxt;
       document.getElementById("uiPillItems").innerText = s.pillItems;
       document.getElementById("uiViewBill").innerText = s.viewBill;
       document.getElementById("uiOrderTitle").innerText = s.orderTitle;
@@ -520,13 +520,29 @@
       document.getElementById("uiThanksNote").innerText = s.thanks;
       document.getElementById("uiBtnCloseInvoice").innerText = s.close;
       document.getElementById("uiBtnPrint").innerText = s.print;
-      
+
+      // Admin Strings
+      document.getElementById("uiNavPos").innerText = s.navPos;
+      document.getElementById("uiNavAdmin").innerText = s.navAdmin;
+      document.getElementById("uiAdminTitle").innerText = s.adminTitle;
+      document.getElementById("tabItemsBtn").innerText = s.tabItems;
+      document.getElementById("tabExpBtn").innerText = s.tabExp;
+      document.getElementById("uiAddNewTxt").innerText = s.addNewBtn;
+      document.getElementById("uiDailyExp").innerText = s.dailyExp;
+      document.getElementById("uiMonthlyExp").innerText = s.monthlyExp;
+      document.getElementById("uiAddExpTitle").innerText = s.addExpTitle;
+      document.getElementById("uiSaveExpBtn").innerText = s.saveExpBtn;
+      document.getElementById("uiRecentExp").innerText = s.recentExp;
+
       const payLbl = document.getElementById("uiPayLabel");
       const sumSpan = document.getElementById("drawerTotalSum").outerHTML;
       payLbl.innerHTML = `${s.payLabel} (₹${sumSpan})`;
 
-      renderGrid(items);
+      filterCat(activeCategory);
       updateCartUI();
+      if(document.getElementById('viewAdmin').classList.contains('active')) {
+        renderAdminInventory();
+      }
     }
 
     function getName(item, isHalf = false) { 
@@ -535,14 +551,36 @@
     }
     function getCat(item) { return (lang === "kn" && item.catKn) ? item.catKn : item.catEn; }
 
+    // CATEGORY FILTERS
+    function filterCat(cat) {
+      vibrate();
+      activeCategory = cat;
+      const chips = document.getElementById('catFilters').children;
+      for(let i=0; i<chips.length; i++) chips[i].classList.remove('active');
+      event.target.classList.add('active');
+
+      document.getElementById('searchInput').value = '';
+      if(cat === 'All') {
+        renderGrid(items);
+      } else {
+        const filtered = items.filter(i => (i.catEn && i.catEn.toLowerCase().includes(cat.toLowerCase())));
+        renderGrid(filtered);
+      }
+    }
+
+    function handleSearch() {
+      const q = document.getElementById("searchInput").value.toLowerCase().trim();
+      const filtered = items.filter(i => 
+        i.id.toString() === q || (i.nameEn && i.nameEn.toLowerCase().includes(q)) || 
+        (i.nameKn && i.nameKn.includes(q)) || (i.catEn && i.catEn.toLowerCase().includes(q))
+      );
+      renderGrid(filtered);
+    }
+
+    // POS GRID
     function renderGrid(list) {
       const grid = document.getElementById("productGrid");
-      const s = dict[lang];
-
-      if (list.length === 0) {
-        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-soft); padding: 40px 10px;">No items found.</p>`;
-        return;
-      }
+      if (list.length === 0) { grid.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding: 40px 10px;">No items found.</p>`; return; }
 
       grid.innerHTML = list.map(item => {
         const fullId = item.id.toString();
@@ -554,51 +592,27 @@
         if (item.halfCost) {
           halfHTML = `
             <div class="variant-row half-variant" onclick="event.stopPropagation(); modifyQty('${halfId}', 1, ${item.halfCost}, true)">
-              <div class="variant-label">
-                <span class="v-title">Half Price</span>
-                <span class="v-price">₹${item.halfCost}</span>
-              </div>
+              <div class="variant-label"><span class="v-title">Half Price</span><span class="v-price">₹${item.halfCost}</span></div>
               <div class="btn-stepper ${inCartHalf > 0 ? 'active-step' : ''}" onclick="event.stopPropagation()">
-                ${inCartHalf === 0 ? `
-                  <button class="btn-stepper add" onclick="modifyQty('${halfId}', 1,${item.halfCost}, true)">+ Add</button>
-                ` : `
-                  <button class="step-icon" onclick="modifyQty('${halfId}', -1)">−</button>
-                  <input type="number" inputmode="numeric" class="step-input" value="${inCartHalf}" onchange="setQty('${halfId}', this.value)" onclick="this.select()" />
-                  <button class="step-icon" onclick="modifyQty('${halfId}', 1)">+</button>
-                `}
+                ${inCartHalf === 0 ? `<button class="btn-stepper add" onclick="modifyQty('${halfId}', 1,${item.halfCost}, true)">+ Add</button>` 
+                : `<button class="step-icon" onclick="modifyQty('${halfId}', -1)">−</button><input type="number" inputmode="numeric" class="step-input" value="${inCartHalf}" onchange="setQty('${halfId}', this.value)" onclick="this.select()" /><button class="step-icon" onclick="modifyQty('${halfId}', 1)">+</button>`}
               </div>
-            </div>
-          `;
+            </div>`;
         }
 
         return `
           <div class="card">
-            <!-- Edit Button on Card -->
-            <button class="edit-pill" onclick="event.stopPropagation(); openAddEditModal(${item.id})">
-              ✏️ ${s.editTxt}
-            </button>
-
+            <button class="edit-pill" onclick="event.stopPropagation(); openAddEditModal(${item.id})">✏️ Edit</button>
             <div class="card-img-wrap" onclick="modifyQty('${fullId}', 1, ${item.cost}, false)">
               <span class="cat-tag">${getCat(item)}</span>
-              <div class="fallback-gradient" style="background:${item.color || 'linear-gradient(135deg, #4f46e5, #818cf8)'};">
-                ${item.nameEn.charAt(0).toUpperCase()}
-              </div>
+              <div class="fallback-gradient" style="background:${item.color || 'linear-gradient(135deg, #4f46e5, #818cf8)'};">${item.nameEn.charAt(0).toUpperCase()}</div>
             </div>
             <div class="card-title">${getName(item)}</div>
-            
             <div class="variant-row" onclick="event.stopPropagation(); modifyQty('${fullId}', 1, ${item.cost}, false)">
-              <div class="variant-label">
-                <span class="v-title">Full Price</span>
-                <span class="v-price">₹${item.cost}</span>
-              </div>
+              <div class="variant-label"><span class="v-title">Full Price</span><span class="v-price">₹${item.cost}</span></div>
               <div class="btn-stepper ${inCartFull > 0 ? 'active-step' : ''}" onclick="event.stopPropagation()">
-                ${inCartFull === 0 ? `
-                  <button class="btn-stepper add" onclick="modifyQty('${fullId}', 1,${item.cost}, false)">+ Add</button>
-                ` : `
-                  <button class="step-icon" onclick="modifyQty('${fullId}', -1)">−</button>
-                  <input type="number" inputmode="numeric" class="step-input" value="${inCartFull}" onchange="setQty('${fullId}', this.value)" onclick="this.select()" />
-                  <button class="step-icon" onclick="modifyQty('${fullId}', 1)">+</button>
-                `}
+                ${inCartFull === 0 ? `<button class="btn-stepper add" onclick="modifyQty('${fullId}', 1,${item.cost}, false)">+ Add</button>` 
+                : `<button class="step-icon" onclick="modifyQty('${fullId}', -1)">−</button><input type="number" inputmode="numeric" class="step-input" value="${inCartFull}" onchange="setQty('${fullId}', this.value)" onclick="this.select()" /><button class="step-icon" onclick="modifyQty('${fullId}', 1)">+</button>`}
               </div>
             </div>
             ${halfHTML}
@@ -607,74 +621,44 @@
       }).join("");
     }
 
-    function handleSearch() {
-      const q = document.getElementById("searchInput").value.toLowerCase().trim();
-      const filtered = items.filter(i => 
-        i.id.toString() === q ||
-        (i.nameEn && i.nameEn.toLowerCase().includes(q)) || 
-        (i.nameKn && i.nameKn.includes(q)) ||
-        (i.catEn && i.catEn.toLowerCase().includes(q)) ||
-        (i.catKn && i.catKn.includes(q))
-      );
-      renderGrid(filtered);
-    }
-
+    // CART LOGIC
     function modifyQty(idStr, delta, priceOverride = 0, isHalf = false) {
       vibrate();
       if (!cart[idStr]) {
         if (delta > 0) {
           const baseId = parseInt(idStr.toString().replace("_half", ""));
           const product = items.find(i => i.id === baseId);
-          if (product) {
-            cart[idStr] = { ...product, qty: 1, _cartId: idStr, _isHalf: isHalf, _cost: priceOverride };
-          }
+          if (product) cart[idStr] = { ...product, qty: 1, _cartId: idStr, _isHalf: isHalf, _cost: priceOverride };
         }
       } else {
         cart[idStr].qty += delta;
         if (cart[idStr].qty <= 0) delete cart[idStr];
       }
-      renderGrid(items);
-      updateCartUI();
+      filterCat(activeCategory); updateCartUI();
     }
 
     function setQty(idStr, value) {
       vibrate();
       const val = parseInt(value, 10);
-      if (isNaN(val) || val <= 0) {
-        delete cart[idStr];
-      } else {
+      if (isNaN(val) || val <= 0) delete cart[idStr];
+      else {
         if (!cart[idStr]) {
           const isHalf = idStr.toString().includes("_half");
           const baseId = parseInt(idStr.toString().replace("_half", ""));
           const product = items.find(i => i.id === baseId);
-          if (product) {
-             const cost = isHalf ? product.halfCost : product.cost;
-             cart[idStr] = { ...product, qty: val, _cartId: idStr, _isHalf: isHalf, _cost: cost };
-          }
-        } else {
-          cart[idStr].qty = val;
-        }
+          if (product) cart[idStr] = { ...product, qty: val, _cartId: idStr, _isHalf: isHalf, _cost: isHalf ? product.halfCost : product.cost };
+        } else { cart[idStr].qty = val; }
       }
-      renderGrid(items);
-      updateCartUI();
+      filterCat(activeCategory); updateCartUI();
     }
 
-    function clearCart() {
-      vibrate();
-      cart = {};
-      document.getElementById("cashGivenInput").value = "";
-      renderGrid(items);
-      updateCartUI();
-      closeDrawer();
-    }
+    function clearCart() { vibrate(); cart = {}; document.getElementById("cashGivenInput").value = ""; filterCat(activeCategory); updateCartUI(); closeDrawer(); }
 
     function updateCartUI() {
       const listEl = document.getElementById("drawerList");
       const pill = document.getElementById("floatCart");
-      const s = dict[lang];
-      const keys = Object.keys(cart);
-      let count = 0;
-      let total = 0;
+      const s = dict[lang]; const keys = Object.keys(cart);
+      let count = 0, total = 0;
 
       if (keys.length === 0) {
         listEl.innerHTML = `<div style="text-align: center; color: var(--text-soft); padding: 50px 10px;">🛒<br>${s.empty}</div>`;
@@ -682,11 +666,7 @@
       } else {
         pill.classList.remove("hidden");
         listEl.innerHTML = keys.map(k => {
-          const item = cart[k];
-          const lineSum = item.qty * item._cost;
-          count += item.qty;
-          total += lineSum;
-
+          const item = cart[k]; const lineSum = item.qty * item._cost; count += item.qty; total += lineSum;
           return `
             <div class="cart-row">
               <div class="row-info">
@@ -699,8 +679,7 @@
                 <button class="step-icon" onclick="modifyQty('${k}', 1)">+</button>
               </div>
               <div class="row-total">₹${lineSum}</div>
-            </div>
-          `;
+            </div>`;
         }).join("");
       }
 
@@ -710,63 +689,51 @@
       calcChange();
     }
 
-    function quickCash(amt) {
-      const input = document.getElementById("cashGivenInput");
-      const cur = parseFloat(input.value) || 0;
-      input.value = cur + amt;
-      calcChange();
-    }
-
-    function exactCash() {
-      const total = parseFloat(document.getElementById("drawerTotalSum").innerText) || 0;
-      document.getElementById("cashGivenInput").value = total;
-      calcChange();
-    }
-
+    function quickCash(amt) { const input = document.getElementById("cashGivenInput"); input.value = (parseFloat(input.value) || 0) + amt; calcChange(); }
+    function exactCash() { document.getElementById("cashGivenInput").value = parseFloat(document.getElementById("drawerTotalSum").innerText) || 0; calcChange(); }
+    
     function calcChange() {
-      const s = dict[lang];
-      const total = parseFloat(document.getElementById("drawerTotalSum").innerText) || 0;
-      const cash = parseFloat(document.getElementById("cashGivenInput").value) || 0;
-      const tag = document.getElementById("changeText");
-
-      if (cash >= total && total > 0) {
-        tag.innerText = `${s.changePre}${(cash - total).toFixed(2)}`;
-        tag.style.color = "var(--accent)";
-      } else if (cash > 0) {
-        tag.innerText = `${s.duePre}${(total - cash).toFixed(2)}`;
-        tag.style.color = "var(--danger)";
-      } else {
-        tag.innerText = s.changeText;
-        tag.style.color = "var(--text-soft)";
-      }
+      const s = dict[lang]; const total = parseFloat(document.getElementById("drawerTotalSum").innerText) || 0;
+      const cash = parseFloat(document.getElementById("cashGivenInput").value) || 0; const tag = document.getElementById("changeText");
+      if (cash >= total && total > 0) { tag.innerText = `Change: ₹${(cash - total).toFixed(2)}`; tag.style.color = "var(--accent)"; } 
+      else if (cash > 0) { tag.innerText = `Due: ₹${(total - cash).toFixed(2)}`; tag.style.color = "var(--danger)"; } 
+      else { tag.innerText = "Change: ₹0"; tag.style.color = "var(--text-soft)"; }
     }
 
-    function openDrawer() {
-      vibrate();
-      const scrim = document.getElementById("drawerScrim");
-      const sheet = document.getElementById("bottomSheet");
-      scrim.style.display = "flex";
-      setTimeout(() => { scrim.classList.add("show"); sheet.classList.add("show"); }, 10);
-    }
-
+    function openDrawer() { vibrate(); document.getElementById("drawerScrim").style.display = "flex"; setTimeout(() => { document.getElementById("drawerScrim").classList.add("show"); document.getElementById("bottomSheet").classList.add("show"); }, 10); }
     function closeDrawer(e) {
-      if(e && e.target !== document.getElementById("drawerScrim") && e.target.id !== "uiCloseLabel") return;
-      vibrate();
-      const scrim = document.getElementById("drawerScrim");
-      const sheet = document.getElementById("bottomSheet");
-      scrim.classList.remove("show");
-      sheet.classList.remove("show");
-      setTimeout(() => { scrim.style.display = "none"; }, 300);
+      if(e && e.target !== document.getElementById("drawerScrim") && e.target.id !== "uiCloseLabel") return; vibrate();
+      document.getElementById("drawerScrim").classList.remove("show"); document.getElementById("bottomSheet").classList.remove("show");
+      setTimeout(() => { document.getElementById("drawerScrim").style.display = "none"; }, 300);
     }
 
-    // Modal Editor Function
+    function generateBill() {
+      const keys = Object.keys(cart);
+      if (keys.length === 0) { alert("Add items to generate bill."); return; }
+
+      let grandTotal = 0;
+      document.getElementById("invoiceTableBody").innerHTML = keys.map(k => {
+        const item = cart[k]; const lineTotal = item.qty * item._cost; grandTotal += lineTotal;
+        return `<tr><td style="padding: 8px 0; font-weight: 700; ${item._isHalf ? 'color: var(--warning);' : ''}">${getName(item, item._isHalf)}</td><td style="text-align: center; padding: 8px 0;">${item.qty}</td><td style="text-align: right; padding: 8px 0; font-weight: 700;">₹${lineTotal}</td></tr>`;
+      }).join("");
+
+      const paid = parseFloat(document.getElementById("cashGivenInput").value) || grandTotal;
+      document.getElementById("invoiceTimeDisplay").innerText = new Date().toLocaleString(lang === "kn" ? "kn-IN" : "en-IN");
+      document.getElementById("invoiceTotalVal").innerText = `₹${grandTotal}`;
+      document.getElementById("invoicePaidVal").innerText = `₹${paid}`;
+      document.getElementById("invoiceChangeVal").innerText = `₹${Math.max(0, paid - grandTotal)}`;
+
+      closeDrawer({target: document.getElementById("drawerScrim")});
+      setTimeout(() => { document.getElementById("invoiceModal").style.display = "flex"; }, 300);
+    }
+    function closeInvoiceModal() { vibrate(); document.getElementById("invoiceModal").style.display = "none"; clearCart(); }
+
+    // ADMIN PORTAL & EDITOR LOGIC
     function openAddEditModal(idToEdit = null) {
       vibrate();
       const modal = document.getElementById("addItemModal");
-      const title = document.getElementById("uiNewItemTitle");
-      
       if (idToEdit) {
-        title.innerText = lang === "kn" ? "ಐಟಂ ಎಡಿಟ್ ಮಾಡಿ" : "Edit Product";
+        document.getElementById("uiNewItemTitle").innerText = lang === "kn" ? "ಐಟಂ ಎಡಿಟ್ ಮಾಡಿ" : "Edit Product";
         const product = items.find(i => i.id === idToEdit);
         document.getElementById("editItemId").value = product.id;
         document.getElementById("addNameEn").value = product.nameEn;
@@ -775,7 +742,7 @@
         document.getElementById("addHalfPrice").value = product.halfCost || "";
         document.getElementById("addCat").value = product.catEn || "";
       } else {
-        title.innerText = dict[lang].newTitle;
+        document.getElementById("uiNewItemTitle").innerText = dict[lang].newTitle;
         document.getElementById("editItemId").value = "";
         document.getElementById("addNameEn").value = "";
         document.getElementById("addNameKn").value = "";
@@ -783,14 +750,10 @@
         document.getElementById("addHalfPrice").value = "";
         document.getElementById("addCat").value = "";
       }
-      
       modal.style.display = "flex";
     }
 
-    function closeAddModal() {
-      vibrate();
-      document.getElementById("addItemModal").style.display = "none";
-    }
+    function closeAddModal() { vibrate(); document.getElementById("addItemModal").style.display = "none"; }
 
     function saveCustomItem() {
       const editId = document.getElementById("editItemId").value;
@@ -800,88 +763,92 @@
       const halfPrice = parseFloat(document.getElementById("addHalfPrice").value);
       const cat = document.getElementById("addCat").value.trim() || "General";
 
-      if (!nameEn || isNaN(price) || price <= 0) {
-        alert(lang === "kn" ? "ಸರಿಯಾದ ಹೆಸರು ಮತ್ತು ಬೆಲೆ ನಮೂದಿಸಿ." : "Enter valid name and price.");
-        return;
-      }
+      if (!nameEn || isNaN(price) || price <= 0) { alert("Enter valid name and price."); return; }
 
       if (editId) {
-        // Editing existing item
-        const idInt = parseInt(editId);
-        const idx = items.findIndex(i => i.id === idInt);
+        const idx = items.findIndex(i => i.id === parseInt(editId));
         if (idx !== -1) {
-          items[idx].nameEn = nameEn;
-          items[idx].nameKn = nameKn;
-          items[idx].cost = price;
-          items[idx].catEn = cat;
-          items[idx].catKn = cat;
-          if (!isNaN(halfPrice) && halfPrice > 0) items[idx].halfCost = halfPrice;
-          else delete items[idx].halfCost;
+          items[idx].nameEn = nameEn; items[idx].nameKn = nameKn; items[idx].cost = price; items[idx].catEn = cat; items[idx].catKn = cat;
+          if (!isNaN(halfPrice) && halfPrice > 0) items[idx].halfCost = halfPrice; else delete items[idx].halfCost;
         }
       } else {
-        // Adding new item
-        const gradients = [
-          "linear-gradient(135deg, #3b82f6, #1d4ed8)", "linear-gradient(135deg, #10b981, #047857)",
-          "linear-gradient(135deg, #f59e0b, #b45309)", "linear-gradient(135deg, #ef4444, #b91c1c)",
-          "linear-gradient(135deg, #8b5cf6, #6d28d9)", "linear-gradient(135deg, #ec4899, #be185d)"
-        ];
-        const randColor = gradients[Math.floor(Math.random() * gradients.length)];
-
-        const newItem = {
-          id: Date.now(), nameEn, nameKn, cost: price, catEn: cat, catKn: cat, color: randColor
-        };
+        const colors = ["linear-gradient(135deg, #3b82f6, #1d4ed8)", "linear-gradient(135deg, #10b981, #047857)", "linear-gradient(135deg, #f59e0b, #b45309)", "linear-gradient(135deg, #ef4444, #b91c1c)", "linear-gradient(135deg, #8b5cf6, #6d28d9)", "linear-gradient(135deg, #ec4899, #be185d)"];
+        const newItem = { id: Date.now(), nameEn, nameKn, cost: price, catEn: cat, catKn: cat, color: colors[Math.floor(Math.random() * colors.length)] };
         if (!isNaN(halfPrice) && halfPrice > 0) newItem.halfCost = halfPrice;
-        
         items.unshift(newItem);
       }
 
-      localStorage.setItem("pos_inv_final_v4", JSON.stringify(items));
-      renderGrid(items);
-      updateCartUI(); 
-      closeAddModal();
+      localStorage.setItem("pos_inv_final_admin_v2", JSON.stringify(items));
+      filterCat(activeCategory); updateCartUI(); renderAdminInventory(); closeAddModal();
     }
 
-    function generateBill() {
-      const keys = Object.keys(cart);
-      if (keys.length === 0) {
-        alert(lang === "kn" ? "ಬಿಲ್ ಮಾಡಲು ಐಟಂ ಸೇರಿಸಿ." : "Add items to generate bill.");
-        return;
-      }
-
-      let grandTotal = 0;
-      document.getElementById("invoiceTableBody").innerHTML = keys.map(k => {
-        const item = cart[k];
-        const lineTotal = item.qty * item._cost;
-        grandTotal += lineTotal;
-        return `
-          <tr>
-            <td style="padding: 8px 0; font-weight: 700; ${item._isHalf ? 'color: var(--warning);' : ''}">${getName(item, item._isHalf)}</td>
-            <td style="text-align: center; padding: 8px 0;">${item.qty}</td>
-            <td style="text-align: right; padding: 8px 0; font-weight: 700;">₹${lineTotal}</td>
-          </tr>
-        `;
-      }).join("");
-
-      const paid = parseFloat(document.getElementById("cashGivenInput").value) || grandTotal;
-      const change = Math.max(0, paid - grandTotal);
-
-      document.getElementById("invoiceTimeDisplay").innerText = new Date().toLocaleString(lang === "kn" ? "kn-IN" : "en-IN");
-      document.getElementById("invoiceTotalVal").innerText = `₹${grandTotal}`;
-      document.getElementById("invoicePaidVal").innerText = `₹${paid}`;
-      document.getElementById("invoiceChangeVal").innerText = `₹${change}`;
-
-      closeDrawer({target: document.getElementById("drawerScrim")});
-      setTimeout(() => { document.getElementById("invoiceModal").style.display = "flex"; }, 300);
+    function renderAdminInventory() {
+      const list = document.getElementById('inventoryList');
+      list.innerHTML = items.map(item => `
+        <div class="inv-list-item">
+          <div>
+            <div class="inv-name">${getName(item)}</div>
+            <div class="inv-cat">${getCat(item)}</div>
+          </div>
+          <div style="text-align: right;">
+            <div class="inv-price">₹${item.cost}</div>
+            ${item.halfCost ? `<div class="inv-half">½ ₹${item.halfCost}</div>` : ''}
+            <div class="inv-actions"><button class="btn-edit-inv" onclick="openAddEditModal(${item.id})">✏️ Edit</button></div>
+          </div>
+        </div>
+      `).join('');
     }
 
-    function closeInvoiceModal() {
+    // EXPENSES LOGIC
+    function addExpense() {
       vibrate();
-      document.getElementById("invoiceModal").style.display = "none";
-      clearCart();
+      const desc = document.getElementById('expDesc').value.trim();
+      const amt = parseFloat(document.getElementById('expAmt').value);
+      const date = document.getElementById('expDate').value;
+      if(!desc || isNaN(amt) || !date) { alert("Enter valid description and amount."); return; }
+
+      expenses.unshift({ id: Date.now(), desc, amt, date });
+      localStorage.setItem("pos_expenses_v2", JSON.stringify(expenses));
+      document.getElementById('expDesc').value = ''; document.getElementById('expAmt').value = '';
+      renderExpenses();
     }
 
-    // Init App
-    renderGrid(items);
+    function deleteExpense(id) {
+      vibrate();
+      if(confirm("Delete this expense?")) {
+        expenses = expenses.filter(e => e.id !== id);
+        localStorage.setItem("pos_expenses_v2", JSON.stringify(expenses));
+        renderExpenses();
+      }
+    }
+
+    function renderExpenses() {
+      const list = document.getElementById('expenseList');
+      let daily = 0, monthly = 0;
+      const today = new Date().toISOString().split('T')[0];
+      const thisMonth = today.substring(0, 7);
+
+      expenses.forEach(e => {
+        if(e.date === today) daily += e.amt;
+        if(e.date.startsWith(thisMonth)) monthly += e.amt;
+      });
+
+      document.getElementById('dailyTotal').innerText = `₹${daily}`;
+      document.getElementById('monthlyTotal').innerText = `₹${monthly}`;
+
+      list.innerHTML = expenses.slice(0, 30).map(e => `
+        <div class="exp-item">
+          <div><div class="exp-desc">${e.desc}</div><div class="exp-date">${e.date}</div></div>
+          <div style="display:flex; align-items:center; gap: 8px;">
+            <div class="exp-amt">₹${e.amt}</div>
+            <button class="del-exp" onclick="deleteExpense(${e.id})">✖</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Init Application
+    filterCat('All');
     updateCartUI();
   </script>
 </body>
