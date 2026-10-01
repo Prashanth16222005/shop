@@ -114,6 +114,11 @@
       display: flex;
       gap: 10px;
       margin-bottom: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--bg-color);
+      padding-bottom: 6px;
     }
 
     .search-bar {
@@ -165,9 +170,6 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.03);
       border: 1px solid rgba(226, 232, 240, 0.5);
       transition: transform 0.1s, box-shadow 0.1s;
-    }
-    .card:active {
-      transform: scale(0.96);
     }
 
     .card-img-wrap {
@@ -246,13 +248,13 @@
       align-items: center;
       justify-content: center;
       border-radius: 10px;
-      height: 34px;
+      height: 36px;
     }
 
     .btn-stepper.add {
       background: var(--primary);
       color: #fff;
-      width: 34px;
+      width: 36px;
       font-size: 1.2rem;
       box-shadow: 0 4px 10px var(--primary-glow);
     }
@@ -266,8 +268,8 @@
     }
 
     .step-icon {
-      width: 28px;
-      height: 28px;
+      width: 30px;
+      height: 30px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -275,12 +277,31 @@
       border-radius: 8px;
       font-weight: 800;
       color: var(--text-main);
+      cursor: pointer;
     }
+    .step-icon:active { background: #e2e8f0; }
 
-    .step-val {
+    /* The Input field inside the stepper so you can type the number */
+    .step-input {
       font-weight: 800;
       font-size: 0.95rem;
       color: var(--primary);
+      background: transparent;
+      border: none;
+      width: 35px;
+      text-align: center;
+      outline: none;
+      user-select: text;
+    }
+
+    /* Remove arrows from number input */
+    .step-input::-webkit-outer-spin-button,
+    .step-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .step-input[type=number] {
+      -moz-appearance: textfield;
     }
 
     /* Floating Pill Cart */
@@ -304,7 +325,6 @@
     }
 
     .floating-cart:active { transform: scale(0.96); }
-    
     .floating-cart.hidden { transform: translateY(150px); }
 
     .cart-info {
@@ -316,7 +336,7 @@
     .cart-price {
       font-size: 1.25rem;
       font-weight: 800;
-      color: #34d399; /* vibrant mint */
+      color: #34d399;
     }
 
     .cart-count {
@@ -539,9 +559,7 @@
       background: #f8fafc; font-size: 0.9rem; outline: none; user-select: text;
     }
 
-    .receipt-print {
-      text-align: center;
-    }
+    .receipt-print { text-align: center; }
     .receipt-table { width: 100%; font-size: 0.85rem; text-align: left; margin: 15px 0; border-collapse: collapse; }
     .receipt-table th { border-bottom: 1px solid var(--border); padding-bottom: 5px; }
     .receipt-table td { padding: 6px 0; }
@@ -600,7 +618,6 @@
       <div class="sheet-body" id="drawerList"></div>
 
       <div class="sheet-footer">
-        <!-- Quick Cash Chips -->
         <div class="quick-cash">
           <button class="cash-pill" onclick="vibrate(); quickCash(10)">+₹10</button>
           <button class="cash-pill" onclick="vibrate(); quickCash(50)">+₹50</button>
@@ -695,85 +712,19 @@
   </div>
 
   <script>
-    // --- Haptic Feedback Wrapper ---
     function vibrate() {
       if (navigator.vibrate) navigator.vibrate(40);
     }
 
     const dict = {
       en: {
-        app: "Shop POS",
-        search: "🔍 Search item...",
-        toggle: "ಕನ್ನಡ",
-        addTxt: "Add",
-        pillItems: "items",
-        viewBill: "View Bill",
-        orderTitle: "Current Order",
-        clear: "Clear",
-        empty: "Cart is empty.<br>Tap items to add.",
-        cashPlaceholder: "Cash Given (₹)",
-        changeText: "Change: ₹0",
-        changePre: "Change: ₹",
-        duePre: "Due: ₹",
-        close: "Close",
-        payLabel: "Print",
-        newTitle: "Add Product",
-        lblEn: "Name (English) *",
-        lblKn: "Name (ಕನ್ನಡ)",
-        lblCost: "Price (₹) *",
-        lblCat: "Category",
-        lblPhoto: "Select Photo",
-        cancel: "Cancel",
-        save: "Save Item",
-        shopHeader: "RETAIL STORE",
-        invoiceMemo: "Tax Invoice / Cash Memo",
-        thItem: "Item",
-        thQty: "Qty",
-        thPrice: "Total",
-        net: "Payable:",
-        paid: "Cash Paid:",
-        change: "Change Returned:",
-        thanks: "Thank you! Visit again.",
-        print: "🖨️ Print"
+        app: "Shop POS", search: "🔍 Search item...", toggle: "ಕನ್ನಡ", addTxt: "Add", pillItems: "items", viewBill: "View Bill", orderTitle: "Current Order", clear: "Clear", empty: "Cart is empty.<br>Tap items to add.", cashPlaceholder: "Cash Given (₹)", changeText: "Change: ₹0", changePre: "Change: ₹", duePre: "Due: ₹", close: "Close", payLabel: "Print", newTitle: "Add Product", lblEn: "Name (English) *", lblKn: "Name (ಕನ್ನಡ)", lblCost: "Price (₹) *", lblCat: "Category", lblPhoto: "Select Photo", cancel: "Cancel", save: "Save Item", shopHeader: "RETAIL STORE", invoiceMemo: "Tax Invoice / Cash Memo", thItem: "Item", thQty: "Qty", thPrice: "Total", net: "Payable:", paid: "Cash Paid:", change: "Change Returned:", thanks: "Thank you! Visit again.", print: "🖨️ Print"
       },
       kn: {
-        app: "ಅಂಗಡಿ POS",
-        search: "🔍 ಐಟಂ ಹುಡುಕಿ...",
-        toggle: "EN",
-        addTxt: "ಸೇರಿಸಿ",
-        pillItems: "ಐಟಂಗಳು",
-        viewBill: "ಬಿಲ್ ನೋಡಿ",
-        orderTitle: "ಪ್ರಸ್ತುತ ಆರ್ಡರ್",
-        clear: "ಅಳಿಸು",
-        empty: "ಯಾವುದೇ ಐಟಂ ಇಲ್ಲ.<br>ಸೇರಿಸಲು ಐಟಂ ಒತ್ತಿ.",
-        cashPlaceholder: "ನೀಡಿದ ಹಣ (₹)",
-        changeText: "ಬಾಕಿ: ₹0",
-        changePre: "ಬಾಕಿ: ₹",
-        duePre: "ಉಳಿಕೆ: ₹",
-        close: "ಮುಚ್ಚು",
-        payLabel: "ಪ್ರಿಂಟ್",
-        newTitle: "ಹೊಸ ಐಟಂ ಸೇರಿಸಿ",
-        lblEn: "ಹೆಸರು (ಇಂಗ್ಲಿಷ್) *",
-        lblKn: "ಹೆಸರು (ಕನ್ನಡ)",
-        lblCost: "ಬೆಲೆ (₹) *",
-        lblCat: "ವಿಭಾಗ",
-        lblPhoto: "ಫೋಟೋ ಆಯ್ಕೆಮಾಡಿ",
-        cancel: "ರದ್ದು",
-        save: "ಉಳಿಸಿ",
-        shopHeader: "ಶ್ರೀ ಚಿಲ್ಲರೆ ವ್ಯಾಪಾರ ಮಳಿಗೆ",
-        invoiceMemo: "ಖರೀದಿ ರಶೀದಿ / ಕ್ಯಾಶ್ ಮೆಮೊ",
-        thItem: "ಐಟಂ",
-        thQty: "ಪ್ರಮಾಣ",
-        thPrice: "ಮೊತ್ತ",
-        net: "ಒಟ್ಟು ಪಾವತಿ:",
-        paid: "ಸ್ವೀಕರಿಸಿದ ನಗದು:",
-        change: "ಮರಳಿಸಿದ ಬಾಕಿ:",
-        thanks: "ಧನ್ಯವಾದಗಳು! ಮತ್ತೆ ಬನ್ನಿ.",
-        print: "🖨️ ಪ್ರಿಂಟ್"
+        app: "ಅಂಗಡಿ POS", search: "🔍 ಐಟಂ ಹುಡುಕಿ...", toggle: "EN", addTxt: "ಸೇರಿಸಿ", pillItems: "ಐಟಂಗಳು", viewBill: "ಬಿಲ್ ನೋಡಿ", orderTitle: "ಪ್ರಸ್ತುತ ಆರ್ಡರ್", clear: "ಅಳಿಸು", empty: "ಯಾವುದೇ ಐಟಂ ಇಲ್ಲ.<br>ಸೇರಿಸಲು ಐಟಂ ಒತ್ತಿ.", cashPlaceholder: "ನೀಡಿದ ಹಣ (₹)", changeText: "ಬಾಕಿ: ₹0", changePre: "ಬಾಕಿ: ₹", duePre: "ಉಳಿಕೆ: ₹", close: "ಮುಚ್ಚು", payLabel: "ಪ್ರಿಂಟ್", newTitle: "ಹೊಸ ಐಟಂ ಸೇರಿಸಿ", lblEn: "ಹೆಸರು (ಇಂಗ್ಲಿಷ್) *", lblKn: "ಹೆಸರು (ಕನ್ನಡ)", lblCost: "ಬೆಲೆ (₹) *", lblCat: "ವಿಭಾಗ", lblPhoto: "ಫೋಟೋ ಆಯ್ಕೆಮಾಡಿ", cancel: "ರದ್ದು", save: "ಉಳಿಸಿ", shopHeader: "ಶ್ರೀ ಚಿಲ್ಲರೆ ವ್ಯಾಪಾರ ಮಳಿಗೆ", invoiceMemo: "ಖರೀದಿ ರಶೀದಿ / ಕ್ಯಾಶ್ ಮೆಮೊ", thItem: "ಐಟಂ", thQty: "ಪ್ರಮಾಣ", thPrice: "ಮೊತ್ತ", net: "ಒಟ್ಟು ಪಾವತಿ:", paid: "ಸ್ವೀಕರಿಸಿದ ನಗದು:", change: "ಮರಳಿಸಿದ ಬಾಕಿ:", thanks: "ಧನ್ಯವಾದಗಳು! ಮತ್ತೆ ಬನ್ನಿ.", print: "🖨️ ಪ್ರಿಂಟ್"
       }
     };
 
-    // Master Catalog (Book.xlsx + Book1.xlsx)
     const masterStock = [
       { id: 101, nameEn: "Ganesh", nameKn: "ಗಣೇಶ್ ಬೀಡಿ", cost: 480, catEn: "Beedi", catKn: "ಬೀಡಿ", img: "images/ganesh.jpg", color: "linear-gradient(135deg, #ea580c, #9a3412)" },
       { id: 102, nameEn: "9 No", nameKn: "೯ ನಂ ಬೀಡಿ", cost: 410, catEn: "Beedi", catKn: "ಬೀಡಿ", img: "images/9no.jpg", color: "linear-gradient(135deg, #c2410c, #7c2d12)" },
@@ -846,7 +797,6 @@
       document.getElementById("uiBtnCloseInvoice").innerText = s.close;
       document.getElementById("uiBtnPrint").innerText = s.print;
       
-      // Update the print button label keeping the span
       const payLbl = document.getElementById("uiPayLabel");
       const sumSpan = document.getElementById("drawerTotalSum").outerHTML;
       payLbl.innerHTML = `${s.payLabel} (₹${sumSpan})`;
@@ -855,12 +805,8 @@
       updateCartUI();
     }
 
-    function getName(item) {
-      return (lang === "kn" && item.nameKn) ? item.nameKn : item.nameEn;
-    }
-    function getCat(item) {
-      return (lang === "kn" && item.catKn) ? item.catKn : item.catEn;
-    }
+    function getName(item) { return (lang === "kn" && item.nameKn) ? item.nameKn : item.nameEn; }
+    function getCat(item) { return (lang === "kn" && item.catKn) ? item.catKn : item.catEn; }
 
     function renderGrid(list) {
       const grid = document.getElementById("productGrid");
@@ -876,7 +822,7 @@
             <div class="card-img-wrap">
               <span class="cat-tag">${getCat(item)}</span>
               ${item.img ? `
-                <img src="${item.img}" alt="${item.nameEn}" class="card-img" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <img src="${item.img}" class="card-img" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
                 <div class="fallback-gradient" style="display:none; background:${item.color || 'linear-gradient(135deg, #4f46e5, #818cf8)'};">
                   ${item.nameEn.charAt(0).toUpperCase()}
                 </div>
@@ -894,7 +840,7 @@
                   <button class="btn-stepper add" onclick="modifyQty(${item.id}, 1)">+</button>
                 ` : `
                   <button class="step-icon" onclick="modifyQty(${item.id}, -1)">−</button>
-                  <span class="step-val">${inCart}</span>
+                  <input type="number" class="step-input" value="${inCart}" onchange="setQty(${item.id}, this.value)" onclick="this.select()" />
                   <button class="step-icon" onclick="modifyQty(${item.id}, 1)">+</button>
                 `}
               </div>
@@ -925,6 +871,24 @@
       } else {
         cart[id].qty += delta;
         if (cart[id].qty <= 0) delete cart[id];
+      }
+      renderGrid(items);
+      updateCartUI();
+    }
+
+    // New function to allow typing quantity directly inside the card input
+    function setQty(id, value) {
+      vibrate();
+      const val = parseInt(value);
+      if (isNaN(val) || val <= 0) {
+        delete cart[id];
+      } else {
+        if (!cart[id]) {
+          const product = items.find(i => i.id === id);
+          if (product) cart[id] = { ...product, qty: val };
+        } else {
+          cart[id].qty = val;
+        }
       }
       renderGrid(items);
       updateCartUI();
@@ -966,7 +930,7 @@
               </div>
               <div class="btn-stepper active-step" style="width: 100px;">
                 <button class="step-icon" onclick="modifyQty(${item.id}, -1)">−</button>
-                <span class="step-val">${item.qty}</span>
+                <input type="number" class="step-input" value="${item.qty}" onchange="setQty(${item.id}, this.value)" onclick="this.select()" />
                 <button class="step-icon" onclick="modifyQty(${item.id}, 1)">+</button>
               </div>
               <div class="row-total">₹${lineSum}</div>
@@ -1012,13 +976,11 @@
       }
     }
 
-    /* Modals & Bottom Sheet */
     function openDrawer() {
       vibrate();
       const scrim = document.getElementById("drawerScrim");
       const sheet = document.getElementById("bottomSheet");
       scrim.style.display = "flex";
-      // tiny delay to trigger CSS transition
       setTimeout(() => {
         scrim.classList.add("show");
         sheet.classList.add("show");
@@ -1032,7 +994,7 @@
       const sheet = document.getElementById("bottomSheet");
       scrim.classList.remove("show");
       sheet.classList.remove("show");
-      setTimeout(() => { scrim.style.display = "none"; }, 300); // match transition time
+      setTimeout(() => { scrim.style.display = "none"; }, 300);
     }
 
     function openAddModal() {
