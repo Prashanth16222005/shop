@@ -241,6 +241,7 @@
       color: var(--primary);
     }
 
+    /* Stepper Styling */
     .btn-stepper {
       background: #f1f5f9;
       border: none;
@@ -258,6 +259,7 @@
       font-size: 1.2rem;
       box-shadow: 0 4px 10px var(--primary-glow);
     }
+    .btn-stepper.add:active { transform: scale(0.9); }
 
     .btn-stepper.active-step {
       width: 100%;
@@ -279,30 +281,25 @@
       color: var(--text-main);
       cursor: pointer;
     }
-    .step-icon:active { background: #e2e8f0; }
+    .step-icon:active { background: #e2e8f0; transform: scale(0.9); }
 
-    /* The Input field inside the stepper so you can type the number */
-    .step-input {
+    /* The box where the number is displayed, tapped to type custom number */
+    .step-input-box {
       font-weight: 800;
-      font-size: 0.95rem;
+      font-size: 1rem;
       color: var(--primary);
-      background: transparent;
-      border: none;
-      width: 35px;
-      text-align: center;
-      outline: none;
-      user-select: text;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      width: 40px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+      cursor: text;
     }
-
-    /* Remove arrows from number input */
-    .step-input::-webkit-outer-spin-button,
-    .step-input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-    .step-input[type=number] {
-      -moz-appearance: textfield;
-    }
+    .step-input-box:active { background: #f1f5f9; }
 
     /* Floating Pill Cart */
     .floating-cart {
@@ -564,7 +561,6 @@
     .receipt-table th { border-bottom: 1px solid var(--border); padding-bottom: 5px; }
     .receipt-table td { padding: 6px 0; }
 
-    /* Print specific */
     @media print {
       body * { visibility: hidden; }
       .dialog-box.printable, .dialog-box.printable * { visibility: visible; }
@@ -575,7 +571,6 @@
 </head>
 <body>
 
-  <!-- Floating Glass Header -->
   <header>
     <div class="brand">
       <div class="brand-icon">₹</div>
@@ -584,10 +579,9 @@
     <button class="lang-toggle" onclick="toggleLanguage()" id="langToggleBtn">ಕನ್ನಡ</button>
   </header>
 
-  <!-- Product Catalog -->
   <main class="workspace">
     <div class="search-row">
-      <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Search item..." oninput="handleSearch()" />
+      <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Search by name or Item No..." oninput="handleSearch()" />
       <button class="btn-add-item" onclick="openAddModal()">
         <span>➕</span> <span id="uiAddTxt">Add</span>
       </button>
@@ -595,7 +589,6 @@
     <div class="grid" id="productGrid"></div>
   </main>
 
-  <!-- Premium Floating Pill Cart -->
   <div class="floating-cart hidden" id="floatCart" onclick="openDrawer()">
     <div class="cart-info">
       <div class="cart-price" id="pillTotal">₹0</div>
@@ -606,7 +599,6 @@
     </button>
   </div>
 
-  <!-- Bottom Sheet Cart Drawer -->
   <div class="scrim" id="drawerScrim" onclick="closeDrawer(event)">
     <div class="bottom-sheet" id="bottomSheet" onclick="event.stopPropagation()">
       <div class="sheet-handle"></div>
@@ -639,7 +631,6 @@
     </div>
   </div>
 
-  <!-- Add Custom Item Dialog -->
   <div class="center-modal" id="addItemModal">
     <div class="dialog-box">
       <h3 style="font-size: 1.1rem; margin-bottom: 16px;" id="uiNewItemTitle">Add Product</h3>
@@ -670,7 +661,6 @@
     </div>
   </div>
 
-  <!-- Printable Invoice Dialog -->
   <div class="center-modal" id="invoiceModal">
     <div class="dialog-box printable receipt-print">
       <h3 style="font-size: 1.2rem; font-weight: 800;" id="uiShopHeader">RETAIL STORE</h3>
@@ -718,10 +708,10 @@
 
     const dict = {
       en: {
-        app: "Shop POS", search: "🔍 Search item...", toggle: "ಕನ್ನಡ", addTxt: "Add", pillItems: "items", viewBill: "View Bill", orderTitle: "Current Order", clear: "Clear", empty: "Cart is empty.<br>Tap items to add.", cashPlaceholder: "Cash Given (₹)", changeText: "Change: ₹0", changePre: "Change: ₹", duePre: "Due: ₹", close: "Close", payLabel: "Print", newTitle: "Add Product", lblEn: "Name (English) *", lblKn: "Name (ಕನ್ನಡ)", lblCost: "Price (₹) *", lblCat: "Category", lblPhoto: "Select Photo", cancel: "Cancel", save: "Save Item", shopHeader: "RETAIL STORE", invoiceMemo: "Tax Invoice / Cash Memo", thItem: "Item", thQty: "Qty", thPrice: "Total", net: "Payable:", paid: "Cash Paid:", change: "Change Returned:", thanks: "Thank you! Visit again.", print: "🖨️ Print"
+        app: "Shop POS", search: "🔍 Search by name or Item No...", toggle: "ಕನ್ನಡ", addTxt: "Add", pillItems: "items", viewBill: "View Bill", orderTitle: "Current Order", clear: "Clear", empty: "Cart is empty.<br>Tap items to add.", cashPlaceholder: "Cash Given (₹)", changeText: "Change: ₹0", changePre: "Change: ₹", duePre: "Due: ₹", close: "Close", payLabel: "Print", newTitle: "Add Product", lblEn: "Name (English) *", lblKn: "Name (ಕನ್ನಡ)", lblCost: "Price (₹) *", lblCat: "Category", lblPhoto: "Select Photo", cancel: "Cancel", save: "Save Item", shopHeader: "RETAIL STORE", invoiceMemo: "Tax Invoice / Cash Memo", thItem: "Item", thQty: "Qty", thPrice: "Total", net: "Payable:", paid: "Cash Paid:", change: "Change Returned:", thanks: "Thank you! Visit again.", print: "🖨️ Print", promptTxt: "Enter quantity:"
       },
       kn: {
-        app: "ಅಂಗಡಿ POS", search: "🔍 ಐಟಂ ಹುಡುಕಿ...", toggle: "EN", addTxt: "ಸೇರಿಸಿ", pillItems: "ಐಟಂಗಳು", viewBill: "ಬಿಲ್ ನೋಡಿ", orderTitle: "ಪ್ರಸ್ತುತ ಆರ್ಡರ್", clear: "ಅಳಿಸು", empty: "ಯಾವುದೇ ಐಟಂ ಇಲ್ಲ.<br>ಸೇರಿಸಲು ಐಟಂ ಒತ್ತಿ.", cashPlaceholder: "ನೀಡಿದ ಹಣ (₹)", changeText: "ಬಾಕಿ: ₹0", changePre: "ಬಾಕಿ: ₹", duePre: "ಉಳಿಕೆ: ₹", close: "ಮುಚ್ಚು", payLabel: "ಪ್ರಿಂಟ್", newTitle: "ಹೊಸ ಐಟಂ ಸೇರಿಸಿ", lblEn: "ಹೆಸರು (ಇಂಗ್ಲಿಷ್) *", lblKn: "ಹೆಸರು (ಕನ್ನಡ)", lblCost: "ಬೆಲೆ (₹) *", lblCat: "ವಿಭಾಗ", lblPhoto: "ಫೋಟೋ ಆಯ್ಕೆಮಾಡಿ", cancel: "ರದ್ದು", save: "ಉಳಿಸಿ", shopHeader: "ಶ್ರೀ ಚಿಲ್ಲರೆ ವ್ಯಾಪಾರ ಮಳಿಗೆ", invoiceMemo: "ಖರೀದಿ ರಶೀದಿ / ಕ್ಯಾಶ್ ಮೆಮೊ", thItem: "ಐಟಂ", thQty: "ಪ್ರಮಾಣ", thPrice: "ಮೊತ್ತ", net: "ಒಟ್ಟು ಪಾವತಿ:", paid: "ಸ್ವೀಕರಿಸಿದ ನಗದು:", change: "ಮರಳಿಸಿದ ಬಾಕಿ:", thanks: "ಧನ್ಯವಾದಗಳು! ಮತ್ತೆ ಬನ್ನಿ.", print: "🖨️ ಪ್ರಿಂಟ್"
+        app: "ಅಂಗಡಿ POS", search: "🔍 ಹೆಸರು ಅಥವಾ ನಂಬರ್ ಹುಡುಕಿ...", toggle: "EN", addTxt: "ಸೇರಿಸಿ", pillItems: "ಐಟಂಗಳು", viewBill: "ಬಿಲ್ ನೋಡಿ", orderTitle: "ಪ್ರಸ್ತುತ ಆರ್ಡರ್", clear: "ಅಳಿಸು", empty: "ಯಾವುದೇ ಐಟಂ ಇಲ್ಲ.<br>ಸೇರಿಸಲು ಐಟಂ ಒತ್ತಿ.", cashPlaceholder: "ನೀಡಿದ ಹಣ (₹)", changeText: "ಬಾಕಿ: ₹0", changePre: "ಬಾಕಿ: ₹", duePre: "ಉಳಿಕೆ: ₹", close: "ಮುಚ್ಚು", payLabel: "ಪ್ರಿಂಟ್", newTitle: "ಹೊಸ ಐಟಂ ಸೇರಿಸಿ", lblEn: "ಹೆಸರು (ಇಂಗ್ಲಿಷ್) *", lblKn: "ಹೆಸರು (ಕನ್ನಡ)", lblCost: "ಬೆಲೆ (₹) *", lblCat: "ವಿಭಾಗ", lblPhoto: "ಫೋಟೋ ಆಯ್ಕೆಮಾಡಿ", cancel: "ರದ್ದು", save: "ಉಳಿಸಿ", shopHeader: "ಶ್ರೀ ಚಿಲ್ಲರೆ ವ್ಯಾಪಾರ ಮಳಿಗೆ", invoiceMemo: "ಖರೀದಿ ರಶೀದಿ / ಕ್ಯಾಶ್ ಮೆಮೊ", thItem: "ಐಟಂ", thQty: "ಪ್ರಮಾಣ", thPrice: "ಮೊತ್ತ", net: "ಒಟ್ಟು ಪಾವತಿ:", paid: "ಸ್ವೀಕರಿಸಿದ ನಗದು:", change: "ಮರಳಿಸಿದ ಬಾಕಿ:", thanks: "ಧನ್ಯವಾದಗಳು! ಮತ್ತೆ ಬನ್ನಿ.", print: "🖨️ ಪ್ರಿಂಟ್", promptTxt: "ಪ್ರಮಾಣವನ್ನು ನಮೂದಿಸಿ:"
       }
     };
 
@@ -840,7 +830,7 @@
                   <button class="btn-stepper add" onclick="modifyQty(${item.id}, 1)">+</button>
                 ` : `
                   <button class="step-icon" onclick="modifyQty(${item.id}, -1)">−</button>
-                  <input type="number" class="step-input" value="${inCart}" onchange="setQty(${item.id}, this.value)" onclick="this.select()" />
+                  <div class="step-input-box" onclick="enterCustomQty(${item.id}, ${inCart})">${inCart}</div>
                   <button class="step-icon" onclick="modifyQty(${item.id}, 1)">+</button>
                 `}
               </div>
@@ -853,6 +843,7 @@
     function handleSearch() {
       const q = document.getElementById("searchInput").value.toLowerCase().trim();
       const filtered = items.filter(i => 
+        i.id.toString() === q ||
         (i.nameEn && i.nameEn.toLowerCase().includes(q)) || 
         (i.nameKn && i.nameKn.includes(q)) ||
         (i.catEn && i.catEn.toLowerCase().includes(q)) ||
@@ -876,22 +867,28 @@
       updateCartUI();
     }
 
-    // New function to allow typing quantity directly inside the card input
-    function setQty(id, value) {
+    // THE FIX: Click the number to prompt for exact quantity without keyboard glitching
+    function enterCustomQty(id, currentQty) {
       vibrate();
-      const val = parseInt(value);
-      if (isNaN(val) || val <= 0) {
-        delete cart[id];
-      } else {
-        if (!cart[id]) {
-          const product = items.find(i => i.id === id);
-          if (product) cart[id] = { ...product, qty: val };
-        } else {
-          cart[id].qty = val;
+      const promptMsg = dict[lang].promptTxt;
+      const val = prompt(promptMsg, currentQty);
+      if (val !== null && val.trim() !== "") {
+        const parsed = parseInt(val, 10);
+        if (!isNaN(parsed) && parsed > 0) {
+          if (!cart[id]) {
+            const product = items.find(i => i.id === id);
+            if (product) cart[id] = { ...product, qty: parsed };
+          } else {
+            cart[id].qty = parsed;
+          }
+          renderGrid(items);
+          updateCartUI();
+        } else if (parsed === 0) {
+           delete cart[id];
+           renderGrid(items);
+           updateCartUI();
         }
       }
-      renderGrid(items);
-      updateCartUI();
     }
 
     function clearCart() {
@@ -928,9 +925,9 @@
                 <div class="row-name">${getName(item)}</div>
                 <div class="row-rate">₹${item.cost}</div>
               </div>
-              <div class="btn-stepper active-step" style="width: 100px;">
+              <div class="btn-stepper active-step" style="width: 105px;">
                 <button class="step-icon" onclick="modifyQty(${item.id}, -1)">−</button>
-                <input type="number" class="step-input" value="${item.qty}" onchange="setQty(${item.id}, this.value)" onclick="this.select()" />
+                <div class="step-input-box" onclick="enterCustomQty(${item.id}, ${item.qty})">${item.qty}</div>
                 <button class="step-icon" onclick="modifyQty(${item.id}, 1)">+</button>
               </div>
               <div class="row-total">₹${lineSum}</div>
