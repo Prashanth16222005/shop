@@ -102,10 +102,10 @@
       display: flex; align-items: center; gap: 4px; box-shadow: 0 4px 15px var(--primary-glow);
     }
 
-    /* 🔥 FIXED: Strictly 2 Items in a Row 🔥 */
+    /* 2 Items in a Row Fixed Grid */
     .grid {
       display: grid; 
-      grid-template-columns: repeat(2, minmax(0, 1fr)); 
+      grid-template-columns: repeat(2, 1fr); /* FORCES 2 COLUMNS */
       gap: 10px;
     }
 
@@ -115,7 +115,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid var(--border);
     }
 
-    /* Edit Button */
+    /* Highly Visible Edit Button */
     .edit-pill {
       position: absolute; top: 4px; right: 4px;
       background: rgba(255, 255, 255, 0.95); border: 1px solid var(--border);
@@ -133,7 +133,7 @@
     .card-img { max-width: 90%; max-height: 90%; object-fit: contain; }
     .fallback-gradient {
       width: 100%; height: 100%; display: flex; align-items: center;
-      justify-content: center; color: #fff; font-size: 1.8rem; font-weight: 800;
+      justify-content: center; color: #fff; font-size: 2rem; font-weight: 800;
     }
 
     .cat-tag {
@@ -147,10 +147,10 @@
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
 
-    /* Separate Full & Half Variant Rows - Scaled for 2 columns */
+    /* Separate Full & Half Variant Rows */
     .variant-row {
       display: flex; justify-content: space-between; align-items: center;
-      background: #f8fafc; padding: 5px; border-radius: 8px; margin-bottom: 5px;
+      background: #f8fafc; padding: 5px 6px; border-radius: 8px; margin-bottom: 5px;
       border: 1px solid #f1f5f9; cursor: pointer;
     }
     .variant-row.half-variant {
@@ -158,36 +158,36 @@
     }
 
     .variant-label { display: flex; flex-direction: column; }
-    .v-title { font-size: 0.58rem; font-weight: 700; color: var(--text-soft); text-transform: uppercase; }
-    .v-price { font-size: 0.95rem; font-weight: 800; color: var(--primary); }
+    .v-title { font-size: 0.6rem; font-weight: 700; color: var(--text-soft); text-transform: uppercase; }
+    .v-price { font-size: 1rem; font-weight: 800; color: var(--primary); }
     .half-variant .v-price { color: var(--warning); }
     .half-variant .v-title { color: #b45309; }
 
-    /* Stepper Styling for 2-Column layout */
+    /* Stepper Styling */
     .btn-stepper {
       display: flex; align-items: center; justify-content: center;
-      border-radius: 6px; height: 28px; border: none; cursor: pointer;
+      border-radius: 6px; height: 30px; border: none; cursor: pointer;
     }
 
     .btn-stepper.add {
-      background: var(--primary); color: #fff; width: 40px; font-size: 0.8rem; font-weight: 800;
+      background: var(--primary); color: #fff; width: 42px; font-size: 0.8rem; font-weight: 800;
     }
     .half-variant .btn-stepper.add { background: var(--warning); }
 
     .btn-stepper.active-step {
-      width: 76px; justify-content: space-between; padding: 0; background: var(--surface);
+      width: 82px; justify-content: space-between; padding: 0; background: var(--surface);
       border: 1px solid var(--primary); box-shadow: 0 2px 8px var(--primary-glow);
     }
     .half-variant .btn-stepper.active-step { border-color: var(--warning); box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2); }
 
     .step-icon {
-      width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;
-      background: transparent; border: none; font-weight: 800; color: var(--text-main); font-size: 0.9rem;
+      width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+      background: transparent; border: none; font-weight: 800; color: var(--text-main); font-size: 1rem;
     }
 
     .step-input {
-      font-weight: 800; font-size: 0.85rem; color: var(--primary);
-      background: transparent; border: none; width: 24px; text-align: center;
+      font-weight: 800; font-size: 0.9rem; color: var(--primary);
+      background: transparent; border: none; width: 28px; text-align: center;
       outline: none; user-select: text; -moz-appearance: textfield; padding: 0;
     }
     .half-variant .step-input { color: var(--warning); }
@@ -308,7 +308,6 @@
         <span>➕</span> <span id="uiAddTxt">Add</span>
       </button>
     </div>
-    <!-- THIS GRID IS NOW STRICTLY 2 COLUMNS -->
     <div class="grid" id="productGrid"></div>
   </main>
 
@@ -391,7 +390,7 @@
   <div class="center-modal" id="invoiceModal">
     <div class="dialog-box printable receipt-print">
       <h3 style="font-size: 1.2rem; font-weight: 800;" id="uiShopHeader">RETAIL STORE</h3>
-      <p style="font-size: 0.8rem; color: var(--text-soft);" id="uiInvoiceMemo">Tax Invoice / Cash Memo</p>
+      <p style="font-size: 0.75rem; color: var(--text-soft);" id="uiInvoiceMemo">Tax Invoice / Cash Memo</p>
       <p style="font-size: 0.7rem; color: var(--text-soft); margin-bottom: 12px; border-bottom: 1px dashed var(--border); padding-bottom: 10px;" id="invoiceTimeDisplay"></p>
 
       <table class="receipt-table">
@@ -483,7 +482,7 @@
       { id: 139, nameEn: "Kashaish (1)", nameKn: "ಕಶಿಶ್ (೧)", cost: 50, catEn: "Pouch", catKn: "ಪೌಚ್", color: "linear-gradient(135deg, #e879f9, #d946ef)" }
     ];
 
-    let items = JSON.parse(localStorage.getItem("pos_inv_final_v5")) || masterStock;
+    let items = JSON.parse(localStorage.getItem("pos_inv_final_v4")) || masterStock;
     let cart = {};
     let lang = "en";
 
@@ -836,7 +835,7 @@
         items.unshift(newItem);
       }
 
-      localStorage.setItem("pos_inv_final_v5", JSON.stringify(items));
+      localStorage.setItem("pos_inv_final_v4", JSON.stringify(items));
       renderGrid(items);
       updateCartUI(); 
       closeAddModal();
